@@ -22,10 +22,9 @@ Please make sure to update tests as appropriate.
 [MIT](https://choosealicense.com/licenses/mit/)
 
 ## Author
-[Parvan S](http
+[Parvan S](https://parvans.github.io/)
 
 ## Acknowledgements
-[Stephen Grider](https://parvans.github.io/)
 
 [ReactJS](https://reactjs.org/)
 
