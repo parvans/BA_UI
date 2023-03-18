@@ -22,5 +22,16 @@ Please make sure to update tests as appropriate.
 [MIT](https://choosealicense.com/licenses/mit/)
 
 ## Author
-[Parvan S](
-    
+[Oluwaseun Ojo](
+
+## Acknowledgements
+[Stephen Grider](
+
+[ReactJS](https://reactjs.org/)
+
+[Creative Tim](https://www.creative-tim.com/)
+
+[Reactstrap](https://reactstrap.github.io/)
+
+[React Router](https://reacttraining.com/react-router/web/guides/quick-start)
+
