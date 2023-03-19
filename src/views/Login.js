@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import { Button, Card, CardBody, CardGroup, CardSubtitle, CardTitle, Col, Container, FormGroup, Input, Label, Row } from 'reactstrap'
 
 export default function Login() {
@@ -14,6 +15,7 @@ export default function Login() {
     const [isRegister, setIsRegister] = useState(false)
     const[isForgotPassword, setIsForgotPassword] = useState(false)
 
+    const navigation=useHistory()
     const handleLogin = () => {
         if (email === '') {
             setEmailError('Email is required')
@@ -27,6 +29,7 @@ export default function Login() {
         } else {
             setPasswordError('')
             console.log('Email: ', email, password);
+            navigation.push('/admin/home')
         }
     }
 

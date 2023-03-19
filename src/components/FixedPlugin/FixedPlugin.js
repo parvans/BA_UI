@@ -1,27 +1,8 @@
-/*!
-
-=========================================================
-* Paper Dashboard React - v1.3.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/paper-dashboard-react
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-* Licensed under MIT (https://github.com/creativetimofficial/paper-dashboard-react/blob/main/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
-
-import { Button } from "reactstrap";
+// import { Button } from "reactstrap";
 
 function FixedPlugin(props) {
-  const [classes, setClasses] = React.useState("dropdown show");
+  const [classes, setClasses] = React.useState("dropdown");
   const handleClick = () => {
     if (classes === "dropdown") {
       setClasses("dropdown show");
@@ -123,7 +104,7 @@ function FixedPlugin(props) {
               />
             </div>
           </li>
-          <li className="button-container">
+          {/* <li className="button-container">
             <Button
               href="https://www.creative-tim.com/product/paper-dashboard-react?ref=pdr-fixed-plugin"
               color="primary"
@@ -143,8 +124,8 @@ function FixedPlugin(props) {
             >
               <i className="nc-icon nc-paper" /> Documentation
             </Button>
-          </li>
-          <li className="header-title">Want more components?</li>
+          </li> */}
+          {/* <li className="header-title">Want more components?</li>
           <li className="button-container">
             <Button
               href="https://www.creative-tim.com/product/paper-dashboard-pro-react?ref=pdr-fixed-plugin"
@@ -155,7 +136,7 @@ function FixedPlugin(props) {
             >
               Get pro version
             </Button>
-          </li>
+          </li> */}
         </ul>
       </div>
     </div>
