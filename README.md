@@ -1,5 +1,5 @@
 # Blogging Application UI
-This is a blogging application UI built with ReactJS. It is a simple application that allows users to create, read, update and delete blog posts. It also allows users to create, read, update and delete comments on blog posts.
+This is a blogging application UI built with ReactJS. It is a simple application that allows users to create, read, update and delete blog posts. 
 
 ## Installation
 To install the application, run the following command:
