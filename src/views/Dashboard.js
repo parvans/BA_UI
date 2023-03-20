@@ -17,7 +17,7 @@
 
 */
 import BlogCard from "components/Cards/BlogCard";
-import React from "react";
+import React, { useEffect, useState } from "react";
 // react plugin used to create charts
 import { Line, Pie } from "react-chartjs-2";
 // reactstrap components
@@ -30,6 +30,7 @@ import {
   Row,
   Col
 } from "reactstrap";
+import { getAllBlogs } from "utilities/apiService";
 // core components
 import {
   dashboard24HoursPerformanceChart,
@@ -37,7 +38,22 @@ import {
   dashboardNASDAQChart
 } from "variables/charts.js";
 
+
 function Dashboard() {
+  const [blogs, setBlogs] = useState([]);
+  const allBlogs=async()=>{
+    try {
+      const response=await getAllBlogs();
+      console.log(response?.data?.data);
+      setBlogs(response?.data?.data);
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
+  useEffect(() => {
+    allBlogs();
+  }, []);
   return (
     <>
       {/* <div className="content">
@@ -230,7 +246,7 @@ function Dashboard() {
 
       <div className="content">
         <Row className="justify-content-center">
-          <Col md="8">
+          {/* <Col md="8">
             <BlogCard 
               title="Why do we use it?"
               description="It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like)."
@@ -238,7 +254,24 @@ function Dashboard() {
               author="Mike Andrew"
               date="2023-03-18T08:16:48.412+00:00"
             />
-          </Col>
+          </Col> */}
+
+          {
+            blogs.map((blog, index) => {
+              return (
+                <Col md="8">
+                  <BlogCard 
+                    title={blog.title}
+                    description={blog.description}
+                    // image={require("assets/img/bg5.jpg")}
+                    author={blog.userId?.name}
+                    date={blog.createdAt}
+                  />
+                </Col>
+              )
+
+            })
+          }
           </Row>
       </div>
 

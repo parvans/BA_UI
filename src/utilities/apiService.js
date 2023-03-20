@@ -37,16 +37,16 @@ export const userRegister = async(name,email,password) => {
 //  ******************** Blog API ***********************
 
 export const getAllBlogs = async() => {
-    let token=JSON.parse(localStorage.getItem('ezuth-token'))
+    let token=localStorage.getItem('ezuth-token')
     const requestOptions={
         method:"GET",
         mode:"cors",
         headers:{
             "Content-Type":"application/json",
-            "ezuth-token":token
+            "auth-token":token
         },
     }
-    const response=await fetch(baseUrl+"blogs",requestOptions)
+    const response=await fetch(baseUrl+"blogs/allblogs",requestOptions)
     if(!response.ok){
         let data=await response.json();
         return {data:data,ok:false}
