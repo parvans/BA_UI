@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
+import { toast, Toaster } from 'react-hot-toast'
 import { useHistory } from 'react-router-dom'
 import { Button, Card, CardBody, CardGroup, CardSubtitle, CardTitle, Col, Container, FormGroup, Input, Label, Row } from 'reactstrap'
+import { userLogin } from 'utilities/apiService'
 
 export default function Login() {
     const [name, setName] = useState('')
@@ -13,10 +15,11 @@ export default function Login() {
     const [passwordError, setPasswordError] = useState('')
     const [confirmPasswordError, setConfirmPasswordError] = useState('')
     const [isRegister, setIsRegister] = useState(false)
-    const[isForgotPassword, setIsForgotPassword] = useState(false)
+    // const[isForgotPassword, setIsForgotPassword] = useState(false)
 
     const navigation=useHistory()
-    const handleLogin = () => {
+    const handleLogin = async(e) => {
+        e.preventDefault()
         if (email === '') {
             setEmailError('Email is required')
         } else if (email.includes('@') === false) {
@@ -28,8 +31,17 @@ export default function Login() {
             setPasswordError('Password is required')
         } else {
             setPasswordError('')
-            console.log('Email: ', email, password);
-            navigation.push('/admin/home')
+            // console.log('Email: ', email, password);
+            // navigation.push('/ezhuth/home')
+
+                const response=await userLogin(email, password)
+                if(response.ok){
+                    toast.success('Login Success')
+                    localStorage.setItem('ezuth-token', response.data.token)
+                    navigation.push('/ezhuth/home')
+                }else{
+                    toast.error(response.data.message)
+                }
         }
     }
 
@@ -118,6 +130,10 @@ export default function Login() {
                 </Col>
             </Row>
         </Container>
+        <Toaster
+            position='top-center'
+            reverseOrder={false}
+        />
     </div>
   )
 }

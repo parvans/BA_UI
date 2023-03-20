@@ -26,16 +26,16 @@ import "assets/demo/demo.css";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 
 import AdminLayout from "layouts/Admin.js";
-import Login from "views/Login.js";
+import Login from "views/ezhuth/auth/Login.js";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <BrowserRouter>
     <Switch>
-      <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
+      <Route path="/ezhuth" render={(props) => <AdminLayout {...props} />} />
       <Route path="/auth/login" render={(props) => <Login {...props} />} />
-      <Redirect to="/admin/dashboard" />
+      <Redirect to="/ezhuth/home" />
     </Switch>
   </BrowserRouter>
 );
