@@ -80,7 +80,7 @@ function Header(props) {
 
   const handleLogout = () => {
     localStorage.clear('ezuth-token')
-    window.location.reload()
+    window.location.href = '/auth/login'
   }
   React.useEffect(() => {
     window.addEventListener("resize", updateColor.bind(this));

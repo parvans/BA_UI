@@ -27,15 +27,17 @@ import "perfect-scrollbar/css/perfect-scrollbar.css";
 
 import AdminLayout from "layouts/Admin.js";
 import Login from "views/ezhuth/auth/Login.js";
-
 const root = ReactDOM.createRoot(document.getElementById("root"));
-
+const token=localStorage.getItem("ezuth-token");
 root.render(
   <BrowserRouter>
     <Switch>
       <Route path="/ezhuth" render={(props) => <AdminLayout {...props} />} />
-      <Route path="/auth/login" render={(props) => <Login {...props} />} />
-      <Redirect to="/ezhuth/home" />
+      {!token&&<Route path="/auth/login" render={(props) => <Login {...props} />} />}
+      {!token ?
+            <Redirect from={`/`} to="/auth/login" />
+          : <Redirect from={`/`} to="/ezhuth/home" />
+          }
     </Switch>
   </BrowserRouter>
 );

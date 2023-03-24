@@ -8,7 +8,7 @@ export default function BlogCard(props) {
 
             <div className="card-header card-header-image">
                 <div className="author">
-                    <div className='row' style={{ display: "flex" }}>
+                    <div className='row' style={{ display: "flex",padding:"0px 10px" }}>
                         {/* <div className='col-2' style={{ flexWrap: "wrap" }}>
                             <a href="#pablo" onClick={e => e.preventDefault()}>
                                 <img src={require("assets/img/mike.jpg")} alt="auther" className="avatar img-raised" />

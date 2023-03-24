@@ -28,7 +28,7 @@ import {
   CardFooter,
   CardTitle,
   Row,
-  Col
+  Col,
 } from "reactstrap";
 import { getAllBlogs } from "utilities/apiService";
 // core components
@@ -267,6 +267,7 @@ function Dashboard() {
                     author={blog.userId?.name}
                     date={blog.createdAt}
                   />
+                  
                 </Col>
               )
 
