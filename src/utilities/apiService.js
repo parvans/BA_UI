@@ -18,14 +18,14 @@ export const userLogin = async(email,password) => {
     return {data:data,ok:true}
 }
 
-export const userRegister = async(name,email,password) => {
+export const userRegister = async(body) => {
     const requestOptions={
         method:"POST",
         mode:"cors",
         headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({name,email,password})
+        body:JSON.stringify(body)
     }
-    const response=await fetch(baseUrl+"user/usersignup",requestOptions)
+    const response=await fetch(baseUrl+"users/usersignup",requestOptions)
     if(!response.ok){
         let data=await response.json();
         return {data:data,ok:false}

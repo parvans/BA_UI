@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { toast, Toaster } from 'react-hot-toast'
 import { useHistory } from 'react-router-dom'
 import { Button, Card, CardBody, CardGroup, CardSubtitle, CardTitle, Col, Container, FormGroup, Input, Label, Row } from 'reactstrap'
+import { userRegister } from 'utilities/apiService'
 import { userLogin } from 'utilities/apiService'
 
 export default function Login() {
@@ -9,13 +10,19 @@ export default function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
+    const [otp, setOtp] = useState('')
     // errors
     const [nameError, setNameError] = useState('')
     const [emailError, setEmailError] = useState('')
     const [passwordError, setPasswordError] = useState('')
     const [confirmPasswordError, setConfirmPasswordError] = useState('')
+    const [otpError, setOtpError] = useState('')
+
     const [isRegister, setIsRegister] = useState(false)
-    // const[isForgotPassword, setIsForgotPassword] = useState(false)
+    const[isForgotPassword, setIsForgotPassword] = useState(false)
+    // const [isverify, setIsverify] = useState(false)
+    const [isOtp, setIsOtp] = useState(false)
+    const [isResetPassword, setIsResetPassword] = useState(false)
 
     const navigation=useHistory()
     const handleLogin = async(e) => {
@@ -38,14 +45,18 @@ export default function Login() {
                 if(response.ok){
                     toast.success('Login Success')
                     localStorage.setItem('ezuth-token', response.data.token)
+                    setTimeout(() => {
                     navigation.push('/ezhuth/home')
+                    window.location.reload()
+                    }, 1000);
                 }else{
                     toast.error(response.data.message)
                 }
         }
     }
 
-    const handleRegister = () => {
+    const handleRegister = async(e) => {
+        e.preventDefault()
         if(name === ''){
             setNameError('Name is required')
         }else{
@@ -69,8 +80,19 @@ export default function Login() {
             setConfirmPasswordError('Password does not match')
         } else {
             setConfirmPasswordError('')
-            console.log('Name: ', name);
-            console.log('Email: ', email);
+            const regResponse=await userRegister({
+                name:name,
+                email:email,
+                password:password
+            })
+            if(regResponse.ok){
+                toast.success('Welcome to Ezhuth')
+                setTimeout(() => {
+                    setIsRegister(false)
+                }, 1000);
+            }else{
+                toast.error(regResponse.data.message)
+            }
         }
 
     }
@@ -82,26 +104,57 @@ export default function Login() {
                     <CardGroup>
                         <Card className='p-4'>
                             <CardBody>
-                                {!isRegister?(
+                                {
+                                isResetPassword ? (
                                     <>
-                                <CardTitle tag='h1'>LOGIN</CardTitle>
-                                <CardSubtitle tag='h6' className='mb-2 text-muted'>Sign In to your account</CardSubtitle>
-                                <FormGroup>
-                                    <Label for='exampleEmail'>Email</Label>
+                                    <CardTitle tag='h1'>Reset Password</CardTitle>
+                                    <CardSubtitle tag='h6' className='mb-2 text-muted'>Reset your password</CardSubtitle>
+                                    <FormGroup>
+                                    <Label for='newPassword'>New Password</Label>
+                                    <Input placeholder="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                                    {passwordError && <p className='text-danger'>{passwordError}</p>}
+                                    <Label for='confirmPassword'>Confirm Password</Label>
+                                    <Input placeholder="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                                    {confirmPasswordError && <p  className='text-danger'>{confirmPasswordError}</p>}
+                                    {/* <a href='#'>
+                                    Forgot Password?</a> */}
+                                    <br />
+                                    <Button color='primary' className='mt-3' block onClick={handleLogin}>Reset Password</Button>
+                                    {/* <p className='text-center mt-3'>Don't have an account? <a href='#' onClick={()=>setIsRegister(true)}>Sign Up</a></p> */}
+                                    </FormGroup>
+                                    </>
+                                ):isOtp ? (
+                                    <>
+                                    <CardTitle tag='h1'>Verify OTP</CardTitle>
+                                    <CardSubtitle tag='h6' className='mb-2 text-muted'>Verify your OTP</CardSubtitle>
+                                    <FormGroup>
+                                    <Label for='otp'>OTP</Label>
+                                    <Input placeholder="OTP" type="text" value={otp} onChange={(e) => setOtp(e.target.value)} />
+                                    {otpError && <p className='text-danger'>{otpError}</p>}
+                                    {/* <a href='#'>
+                                    Forgot Password?</a> */}
+                                    <br />
+                                    <Button color='primary' className='mt-3' block onClick={handleLogin}>Verify OTP</Button>
+                                    {/* <p className='text-center mt-3'>Don't have an account? <a href='#' onClick={()=>setIsRegister(true)}>Sign Up</a></p> */}
+                                    </FormGroup>
+                                    </>
+                                ):isForgotPassword ? (
+                                    <>
+                                    <CardTitle tag='h1'>Verify Email</CardTitle>
+                                    <CardSubtitle tag='h6' className='mb-2 text-muted'>Verify your email</CardSubtitle>
+                                    <FormGroup>
+                                    <Label for='email'>Email</Label>
                                     <Input placeholder="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                                     {emailError && <p className='text-danger'>{emailError}</p>}
-                                    <Label for='examplePassword'>Password</Label>
-                                    <Input placeholder="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                                    {passwordError && <p  className='text-danger'>{passwordError}</p>}
-                                    <a href='#'>
-                                    Forgot Password?</a>
+                                    <a href='#' onClick={()=>setIsForgotPassword(false)}>
+                                    Back to Login
+                                    </a>
                                     <br />
-                                    <Button color='primary' className='mt-3' block onClick={handleLogin}>Login</Button>
-                                    <p className='text-center mt-3'>Don't have an account? <a href='#' onClick={()=>setIsRegister(true)}>Sign Up</a></p>
-                                </FormGroup>
-                                </>
-                                )
-                                :(
+                                    <Button color='primary' className='mt-3' block onClick={handleLogin}>Verify Email</Button>
+                                    {/* <p className='text-center mt-3'>Don't have an account? <a href='#' onClick={()=>setIsRegister(true)}>Sign Up</a></p> */}
+                                    </FormGroup>
+                                    </>
+                                ):isRegister ? (
                                     <>
                                 <CardTitle tag='h1'>REGISTER</CardTitle>
                                 <CardSubtitle tag='h6' className='mb-2 text-muted'>Create your account</CardSubtitle>
@@ -120,6 +173,24 @@ export default function Login() {
                                     {confirmPasswordError && <p  className='text-danger'>{confirmPasswordError}</p>}
                                     <Button color='primary' className='mt-3' block onClick={handleRegister}>Register</Button>
                                     <p className='text-center mt-3'>Already have an account? <a href='#' onClick={()=>setIsRegister(false)}>Login</a></p>
+                                </FormGroup>
+                                </>
+                                ):(
+                                    <>
+                                <CardTitle tag='h1'>LOGIN</CardTitle>
+                                <CardSubtitle tag='h6' className='mb-2 text-muted'>Sign In to your account</CardSubtitle>
+                                <FormGroup>
+                                    <Label for='exampleEmail'>Email</Label>
+                                    <Input placeholder="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                                    {emailError && <p className='text-danger'>{emailError}</p>}
+                                    <Label for='examplePassword'>Password</Label>
+                                    <Input placeholder="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                                    {passwordError && <p  className='text-danger'>{passwordError}</p>}
+                                    <a href='#' onClick={()=>setIsForgotPassword(true)}>
+                                    Forgot Password?</a>
+                                    <br />
+                                    <Button color='primary' className='mt-3' block onClick={handleLogin}>Login</Button>
+                                    <p className='text-center mt-3'>Don't have an account? <a href='#' onClick={()=>setIsRegister(true)}>Sign Up</a></p>
                                 </FormGroup>
                                 </>
                                 )
