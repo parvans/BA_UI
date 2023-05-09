@@ -10,6 +10,7 @@ export default function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
+    const [photo, setPhoto] = useState('')
     const [otp, setOtp] = useState('')
     // errors
     const [nameError, setNameError] = useState('')
@@ -96,6 +97,20 @@ export default function Login() {
         }
 
     }
+
+    const photoUpload = (e) => {
+        e.preventDefault()
+        const reader = new FileReader()
+        const file = e.target.files[0]
+        reader.readAsDataURL(file)
+        reader.onloadend = () => {
+            setPhoto({
+                file: file,
+                previewURL: reader.result
+            })
+        }
+        reader.readAsDataURL(file)
+    }
   return (
     <div className='bg-light min-vh-100 d-flex flex-row align-items-center'>
         <Container>
@@ -159,6 +174,19 @@ export default function Login() {
                                 <CardTitle tag='h1'>REGISTER</CardTitle>
                                 <CardSubtitle tag='h6' className='mb-2 text-muted'>Create your account</CardSubtitle>
                                 <FormGroup>
+                                    <Label for='photo-upload' className='text-center w-100' style={{cursor:'pointer'}}>
+                                        <span className='text-primary' onClick={photoUpload}>
+                                            <img
+
+                                                src='https://www.pngitem.com/pimgs/m/30-307416_profile-icon-png-image-free-download-searchpng-employee.png'
+                                                className='rounded-circle img-thumbnail'
+                                                alt='profile'
+                                                width='100'
+                                                height='100'
+                                            />
+                                            <br />
+                                        </span>
+                                    </Label>                                    
                                     <Label for='exampleName'>Name</Label>
                                     <Input placeholder="Name" type="text" value={name} onChange={(e) => setName(e.target.value)} />
                                     {nameError && <p className='text-danger' >{nameError}</p>}

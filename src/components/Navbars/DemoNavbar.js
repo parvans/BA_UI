@@ -82,6 +82,9 @@ function Header(props) {
     localStorage.clear('ezuth-token')
     window.location.href = '/auth/login'
   }
+  const handleProfile = () => {
+    window.location.href = '/ezhuth/user-profile'
+  }
   React.useEffect(() => {
     window.addEventListener("resize", updateColor.bind(this));
   });
@@ -167,6 +170,8 @@ function Header(props) {
                   Profile
                   </DropdownItem> */}
                 <DropdownItem tag="a" onClick={handleLogout}>Logout</DropdownItem>
+                <DropdownItem tag="a" onClick={handleProfile}>
+                  Profile</DropdownItem>
                 {/* <DropdownItem tag="a">Something else here</DropdownItem> */}
               </DropdownMenu>
             </Dropdown>

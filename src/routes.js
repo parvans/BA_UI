@@ -49,13 +49,13 @@ var routes = [
     layout: "/ezhuth"
   },
 
-  {
-    path:"/login",
-    name:"Login",
-    icon:"nc-icon nc-key-25",
-    component:Login,
-    layout:"/auth"
-  },
+  // {
+  //   path:"/login",
+  //   name:"Login",
+  //   icon:"nc-icon nc-key-25",
+  //   component:Login,
+  //   layout:"/auth"
+  // },
 
   // {
   //   path: "/icons",
@@ -78,13 +78,13 @@ var routes = [
   //   component: Notifications,
   //   layout: "/ezhuth"
   // },
-  // {
-  //   path: "/tables",
-  //   name: "Table List",
-  //   icon: "nc-icon nc-tile-56",
-  //   component: TableList,
-  //   layout: "/ezhuth"
-  // },
+  {
+    path: "/tables",
+    name: "Table List",
+    icon: "nc-icon nc-tile-56",
+    component: TableList,
+    layout: "/ezhuth"
+  },
   // {
   //   path: "/typography",
   //   name: "Typography",
