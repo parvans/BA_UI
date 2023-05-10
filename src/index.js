@@ -34,10 +34,7 @@ root.render(
     <Switch>
       <Route path="/ezhuth" render={(props) => <AdminLayout {...props} />} />
       {!token&&<Route path="/auth/login" render={(props) => <Login {...props} />} />}
-      {!token ?
-            <Redirect from={`/`} to="/auth/login" />
-          : <Redirect from={`/`} to="/ezhuth/home" />
-          }
+      {!token ? <Redirect from={`/`} to="/auth/login" /> : <Redirect from={`/`} to="/ezhuth/home" />}
     </Switch>
   </BrowserRouter>
 );
