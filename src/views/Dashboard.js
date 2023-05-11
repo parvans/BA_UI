@@ -261,6 +261,7 @@ function Dashboard() {
               return (
                 <Col md="8">
                   <BlogCard 
+                  key={index}
                     title={blog.title}
                     description={blog.description}
                     // image={require("assets/img/bg5.jpg")}

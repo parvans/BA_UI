@@ -57,13 +57,13 @@ var routes = [
   //   layout:"/auth"
   // },
 
-  // {
-  //   path: "/icons",
-  //   name: "Icons",
-  //   icon: "nc-icon nc-diamond",
-  //   component: Icons,
-  //   layout: "/ezhuth"
-  // },
+  {
+    path: "/icons",
+    name: "Icons",
+    icon: "nc-icon nc-diamond",
+    component: Icons,
+    layout: "/ezhuth"
+  },
   // {
   //   path: "/maps",
   //   name: "Maps",
@@ -78,13 +78,13 @@ var routes = [
   //   component: Notifications,
   //   layout: "/ezhuth"
   // },
-  {
-    path: "/tables",
-    name: "Table List",
-    icon: "nc-icon nc-tile-56",
-    component: TableList,
-    layout: "/ezhuth"
-  },
+  // {
+  //   path: "/tables",
+  //   name: "Table List",
+  //   icon: "nc-icon nc-tile-56",
+  //   component: TableList,
+  //   layout: "/ezhuth"
+  // },
   // {
   //   path: "/typography",
   //   name: "Typography",
