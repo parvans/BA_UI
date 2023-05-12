@@ -264,7 +264,7 @@ function Dashboard() {
                   key={index}
                     title={blog.title}
                     description={blog.description}
-                    // image={require("assets/img/bg5.jpg")}
+                    image={blog.image}
                     author={blog.userId?.name}
                     date={blog.createdAt}
                   />

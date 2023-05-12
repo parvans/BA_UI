@@ -35,6 +35,51 @@ export const userRegister = async (body) => {
     let data = await response?.json();
     return { data: data, ok: true }
 }
+export const verifyUserEmail = async (body) => {
+    const requestOptions = {
+        method: "POST",
+        mode: "cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+    }
+    const response = await fetch(baseUrl + "users/verifyemail", requestOptions)
+    if (!response.ok) {
+        let data = await response.json();
+        return { data: data, ok: false }
+    }
+    let data = await response?.json();
+    return { data: data, ok: true }
+}
+export const verifyUserOtp = async (body) => {
+    const requestOptions = {
+        method: "POST",
+        mode: "cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+    }
+    const response = await fetch(baseUrl + "users/verifyotp", requestOptions)
+    if (!response.ok) {
+        let data = await response.json();
+        return { data: data, ok: false }
+    }
+    let data = await response?.json();
+    return { data: data, ok: true }
+}
+export const userResetPassword = async (body) => {
+    const requestOptions = {
+        method: "POST",
+        mode: "cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+    }
+    const response = await fetch(baseUrl + "users/resetpassword", requestOptions)
+    if (!response.ok) {
+        let data = await response.json();
+        return { data: data, ok: false }
+    }
+    let data = await response?.json();
+    return { data: data, ok: true }
+}
 
 //  ******************** Blog API ***********************
 
@@ -90,4 +135,24 @@ export const deleteMyBlogs = async (id) => {
     let data = await response?.json();
     return { data: data, ok: true }
 }
+
+export const addUserBlog = async (body) => {
+    const requestOptions = {
+        method: "POST",
+        mode: "cors",
+        headers: { 
+            "Content-Type": "application/json",
+            "auth-token": token
+        },
+        body: JSON.stringify(body)
+    }
+    const response = await fetch(baseUrl + "blogs/add", requestOptions)
+    if (!response.ok) {
+        let data = await response.json();
+        return { data: data, ok: false }
+    }
+    let data = await response?.json();
+    return { data: data, ok: true }
+}
+
 

@@ -3,8 +3,9 @@ import moment from 'moment'
 import React, { useEffect, useRef, useState } from 'react'
 import { Toaster, toast } from 'react-hot-toast'
 import { Card, CardBody, CardHeader, Col, Row, Table, Modal, ModalHeader, ModalBody, ModalFooter, Button, Form } from 'reactstrap'
+import { addUserBlog } from 'utilities/apiService'
 import { deleteMyBlogs } from 'utilities/apiService'
-import { getMyBlogs } from 'utilities/apiService'
+import { getMyBlogs} from 'utilities/apiService'
 export default function MyBlogs() {
     const editorRef = useRef(null)
     const [blogs, setBlogs] = useState()
@@ -14,20 +15,14 @@ export default function MyBlogs() {
     const [title, setTitle] = useState('')
     const [content, setContent] = useState('')
     const [image, setImage] = useState('')
+    const [preview, setPreview] = useState('')
 
-    const config = {
-        readonly: false, // all options from https://xdsoft.net/jodit/doc/,
-        uploader: {
-            url: 'https://xdsoft.net/jodit/finder/?action=fileUpload'
-        },
-        filebrowser: {
-            ajax: {
-                url: 'https://xdsoft.net/jodit/finder/'
-            },
-            height: 580,
-        }
-    }
-  
+    //errors
+    const [titleError, setTitleError] = useState('')
+    const [contentError, setContentError] = useState('')
+    const [imageError, setImageError] = useState('')
+
+
     const getBlogs = async () => {
         try {
             const response = await getMyBlogs()
@@ -57,6 +52,56 @@ export default function MyBlogs() {
             console.log(error);
         }
     }
+// This is Blogg add section ---------------------------------------------
+    const handleFileInput=(e)=>{
+        const file=e.target.files[0]
+        previewFile(file)
+        console.log(file);
+    }
+    const previewFile=(file)=>{
+        const render=new FileReader()
+        render.readAsDataURL(file)
+        render.onloadend=()=>{
+            setPreview(render.result)
+        }
+    }
+
+    const addBlog=async(e)=>{
+        e.preventDefault()
+        if(!title){
+            setTitleError('Title is required')
+        }else{
+            setTitleError('')
+        }
+        if(!content){
+            setContentError('Content is required')
+        }else{
+            setContentError('')
+        }
+        if(!image){
+            setImageError('Image is required')
+        }else{
+            
+            setImageError('')
+        }
+
+        try {
+            const res=await addUserBlog({
+                title,
+                description:content,
+                data:preview
+            })
+            if(!res?.ok){
+                toast.error(res?.data?.message)
+            }else{
+                toast.success(res?.data?.message)
+                setOpenAdd(!openAdd)
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
         getBlogs()
     }, [blogs, openModal])
@@ -80,6 +125,7 @@ export default function MyBlogs() {
                                 <h5 className="title">My Blogs</h5>
                                 <Button className="btn btn-primary btn-md btn-round" onClick={() => setOpenAdd(!openAdd)}>Add Blog</Button>
                             </CardHeader>
+                            {blogs?.length === 0 ? <h5 className="text-center">No Blogs Found</h5> :
                             <Table responsiveTag={true} hover onScroll={(e) => console.log(e)} style={{ overflowX: 'scroll' }}>
                                 <thead className="text-primary">
                                     <tr>
@@ -106,7 +152,7 @@ export default function MyBlogs() {
                                         </tr>
                                     ))}
                                 </tbody>
-                            </Table>
+                            </Table>}
                         </CardBody>
                     </Card>:(
                         <Card style={{ maxWidth: "100%", minWidth: "100%", marginTop: '30px', borderColor: 'transparent' }} >
@@ -136,7 +182,8 @@ export default function MyBlogs() {
                         <Form>
                             <div className="form-group">
                                 <label htmlFor="exampleFormControlInput1">Title</label>
-                                <input type="text" className="form-control" id="exampleFormControlInput1" placeholder="Title" />
+                                <input type="text" className="form-control" value={title} onChange={(e)=>setTitle(e.target.value)} id="exampleFormControlInput1" placeholder="Title" />
+                                {titleError&&<p style={{color:'red'}}>{titleError}</p>}
                             </div>
                             <div className="form-group">
                                 <label htmlFor="exampleFormControlTextarea1">Content</label>
@@ -144,17 +191,21 @@ export default function MyBlogs() {
                                 <JoditEditor 
                                 ref={editorRef} 
                                 value={content} 
-                                config={config}
                                 tabIndex={1} // tabIndex of textarea
                                 onBlur={newContent => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
                                 onChange={(newContent) => setContent(newContent)}
                                 />
+                                {contentError&&<p style={{color:'red'}}>{contentError}</p>}
                             </div>
-                            {/* <div className="form-group">
+                            <div className="form-group">
                                 <label htmlFor="exampleFormControlFile1">Image</label>
-                                <input type="file" className="form-control-file" id="exampleFormControlFile1" />
-                            </div> */}
-                            <button type="submit" className="btn btn-primary">Submit</button>
+                                <input type="file" className="form-control-file" id="exampleFormControlFile1" onChange={handleFileInput} value={image} />
+                                {imageError&&<p style={{color:'red'}}>{imageError}</p>}
+                            </div>
+                            {preview&&(<div className="form-group">
+                                <img src={preview} alt="blog" style={{width:'200px',height:'200px'}}/>
+                            </div>)}
+                            <Button className="btn btn-primary btn-md btn-round" onClick={addBlog}>Post Blog</Button>
                         </Form>
                         </CardBody>
                     </Card>

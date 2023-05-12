@@ -2,6 +2,9 @@ import React, { useState } from 'react'
 import { toast, Toaster } from 'react-hot-toast'
 import { useHistory } from 'react-router-dom'
 import { Button, Card, CardBody, CardGroup, CardSubtitle, CardTitle, Col, Container, FormGroup, Input, Label, Row } from 'reactstrap'
+import { verifyUserEmail } from 'utilities/apiService'
+import { userResetPassword } from 'utilities/apiService'
+import { verifyUserOtp } from 'utilities/apiService'
 import { userRegister } from 'utilities/apiService'
 import { userLogin } from 'utilities/apiService'
 
@@ -98,18 +101,72 @@ export default function Login() {
 
     }
 
-    const photoUpload = (e) => {
+    const verifyEmail = async(e) => {
         e.preventDefault()
-        const reader = new FileReader()
-        const file = e.target.files[0]
-        reader.readAsDataURL(file)
-        reader.onloadend = () => {
-            setPhoto({
-                file: file,
-                previewURL: reader.result
-            })
+        if (email === '') {
+            setEmailError('Email is required')
+        }else if(email.includes('@') === false){
+            setEmailError('Email is invalid')
+        }else{
+            setEmailError('')
+            const res=await verifyUserEmail({email:email})
+            console.log(res);
+            if(res.ok){
+                toast.success('OTP sent to your email')
+                setTimeout(() => {
+                    setIsForgotPassword(false)
+                    setIsOtp(true)
+                }, 1000);
+            }else{
+                toast.error(res.data.message)
+            }
         }
-        reader.readAsDataURL(file)
+    }
+
+    const verifyOtp=async(e)=>{
+        e.preventDefault()
+        if(otp === ''){
+            setOtpError('OTP is required')
+        }else{
+            setOtpError('')
+            const res=await verifyUserOtp({email:email,otp:otp})
+            console.log(res);
+            if(res.ok){
+                toast.success(res.data.message)
+                setTimeout(() => {
+                    setIsOtp(false)
+                    setIsResetPassword(true)
+                }, 1000);
+            }else{
+                toast.error(res.data.message)
+            }
+        }
+    }
+
+    const handleResetPassword=async(e)=>{
+        e.preventDefault()
+        if (password === '') {
+            setPasswordError('Password is required')
+        } else {
+            setPasswordError('')
+        }
+        if (confirmPassword === '') {
+            setConfirmPasswordError('Confirm Password is required')
+        } else if (confirmPassword !== password) {
+            setConfirmPasswordError('Password does not match')
+        } else {
+            setConfirmPasswordError('')
+            const res=await userResetPassword({email:email,password:password})
+            if(res.ok){
+                toast.success(res.data.message)
+                setTimeout(() => {
+                    setIsResetPassword(false)
+                    setIsRegister(false)
+                }, 1000);
+            }else{
+                toast.error(res.data.message)
+            }
+        }
     }
   return (
     <div className='bg-light min-vh-100 d-flex flex-row align-items-center'>
@@ -129,12 +186,12 @@ export default function Login() {
                                     <Input placeholder="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                                     {passwordError && <p className='text-danger'>{passwordError}</p>}
                                     <Label for='confirmPassword'>Confirm Password</Label>
-                                    <Input placeholder="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                                    <Input placeholder="Password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
                                     {confirmPasswordError && <p  className='text-danger'>{confirmPasswordError}</p>}
                                     {/* <a href='#'>
                                     Forgot Password?</a> */}
                                     <br />
-                                    <Button color='primary' className='mt-3' block onClick={handleLogin}>Reset Password</Button>
+                                    <Button color='primary' className='mt-3' block onClick={handleResetPassword}>Reset Password</Button>
                                     {/* <p className='text-center mt-3'>Don't have an account? <a href='#' onClick={()=>setIsRegister(true)}>Sign Up</a></p> */}
                                     </FormGroup>
                                     </>
@@ -149,7 +206,7 @@ export default function Login() {
                                     {/* <a href='#'>
                                     Forgot Password?</a> */}
                                     <br />
-                                    <Button color='primary' className='mt-3' block onClick={handleLogin}>Verify OTP</Button>
+                                    <Button color='primary' className='mt-3' block onClick={verifyOtp}>Verify OTP</Button>
                                     {/* <p className='text-center mt-3'>Don't have an account? <a href='#' onClick={()=>setIsRegister(true)}>Sign Up</a></p> */}
                                     </FormGroup>
                                     </>
@@ -165,7 +222,7 @@ export default function Login() {
                                     Back to Login
                                     </a>
                                     <br />
-                                    <Button color='primary' className='mt-3' block onClick={handleLogin}>Verify Email</Button>
+                                    <Button color='primary' className='mt-3' block onClick={verifyEmail}>Verify Email</Button>
                                     {/* <p className='text-center mt-3'>Don't have an account? <a href='#' onClick={()=>setIsRegister(true)}>Sign Up</a></p> */}
                                     </FormGroup>
                                     </>
@@ -174,7 +231,7 @@ export default function Login() {
                                 <CardTitle tag='h1'>REGISTER</CardTitle>
                                 <CardSubtitle tag='h6' className='mb-2 text-muted'>Create your account</CardSubtitle>
                                 <FormGroup>
-                                    <Label for='photo-upload' className='text-center w-100' style={{cursor:'pointer'}}>
+                                    {/* <Label for='photo-upload' className='text-center w-100' style={{cursor:'pointer'}}>
                                         <span className='text-primary' onClick={photoUpload}>
                                             <img
 
@@ -186,7 +243,7 @@ export default function Login() {
                                             />
                                             <br />
                                         </span>
-                                    </Label>                                    
+                                    </Label>                                     */}
                                     <Label for='exampleName'>Name</Label>
                                     <Input placeholder="Name" type="text" value={name} onChange={(e) => setName(e.target.value)} />
                                     {nameError && <p className='text-danger' >{nameError}</p>}
