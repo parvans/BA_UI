@@ -1,21 +1,3 @@
-/*!
-
-=========================================================
-* Paper Dashboard React - v1.3.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/paper-dashboard-react
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-* Licensed under MIT (https://github.com/creativetimofficial/paper-dashboard-react/blob/main/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import BlogCard from "components/Cards/BlogCard";
 import React, { useEffect, useState } from "react";
 // react plugin used to create charts
@@ -31,6 +13,7 @@ import {
   Col,
 } from "reactstrap";
 import { getAllBlogs } from "utilities/apiService";
+import Blog from "./ezhuth/Blog/Blog";
 // core components
 // import {
 //   dashboard24HoursPerformanceChart,
@@ -41,10 +24,11 @@ import { getAllBlogs } from "utilities/apiService";
 
 function Dashboard() {
   const [blogs, setBlogs] = useState([]);
+  const [blog, setBlog] = useState(false);
   const allBlogs=async()=>{
     try {
       const response=await getAllBlogs();
-      console.log(response?.data?.data);
+      // console.log(response?.data?.data);
       setBlogs(response?.data?.data);
     } catch (error) {
       console.log(error);
@@ -245,7 +229,7 @@ function Dashboard() {
       </div> */}
 
       <div className="content">
-        <Row className="justify-content-center">
+        {!blog?<Row className="justify-content-center">
           {/* <Col md="8">
             <BlogCard 
               title="Why do we use it?"
@@ -263,10 +247,12 @@ function Dashboard() {
                   <BlogCard 
                   key={index}
                     title={blog.title}
-                    description={blog.description}
                     image={blog.image}
                     author={blog.userId?.name}
                     date={blog.createdAt}
+                    id={blog._id}
+                    blog={blog}
+                    setBlog={setBlog}
                   />
                   
                 </Col>
@@ -274,7 +260,11 @@ function Dashboard() {
 
             })
           }
-          </Row>
+          </Row>:
+          <Blog
+          blog={blog}
+          setBlog={setBlog}
+          />}
       </div>
 
     </>

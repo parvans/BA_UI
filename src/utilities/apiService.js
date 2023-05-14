@@ -118,6 +118,23 @@ export const getMyBlogs = async () => {
     let data = await response?.json();
     return { data: data, ok: true }
 }
+export const getABlog = async (id) => {
+    const requestOptions = {
+        method: "GET",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json",
+            "auth-token": token
+        },
+    }
+    const response = await fetch(baseUrl + `blogs/getablog?id=${id}`, requestOptions)
+    if (!response.ok) {
+        let data = await response.json();
+        return { data: data, ok: false }
+    }
+    let data = await response?.json();
+    return { data: data, ok: true }
+}
 export const deleteMyBlogs = async (id) => {
     const requestOptions = {
         method: "DELETE",

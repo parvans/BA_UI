@@ -3,7 +3,7 @@ import React from 'react'
 import {Image} from 'cloudinary-react'
 
 export default function BlogCard(props) {
-    const { title, description, image, author, date } = props
+    const { title, image, author, date ,id,blog,setBlog} = props
     return (
         <div className="card card-blog">
 
@@ -32,14 +32,17 @@ export default function BlogCard(props) {
                 </div>
                 <div className="colored-shadow">
 
-                {image && <a href="#pablo" onClick={e => e.preventDefault()} >
-                    {/* <img className="img" src={image} style={{ height: "300px", width: "100%" }} /> */}
-                    <Image cloudName="dgupyenrw" publicId={image} style={{ height: "300px", width: "100%" }} />
-                </a>}
+                {image &&<Image cloudName="dgupyenrw" publicId={image} style={{ height: "300px", width: "100%" }} />}
                 </div>
                 <div className="card-body" >
                     <h4 className="card-title">
-                        <a href="#pablo" onClick={e => e.preventDefault()}>
+                        <a 
+                        onClick={()=>{
+                            setBlog(true)
+                            localStorage.setItem("blogId",id)
+                        }}
+                        href='#blog'
+                        >
                             {title}
                         </a>
                     </h4>

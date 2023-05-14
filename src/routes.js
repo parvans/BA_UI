@@ -25,6 +25,7 @@ import Maps from "views/Map.js";
 import UserPage from "views/User.js";
 import Login from "views/ezhuth/auth/Login.js";
 import MyBlogs from "views/ezhuth/myBlogs/MyBlogs";
+import Blog from "views/ezhuth/Blog/Blog";
 
 var routes = [
   {
@@ -41,6 +42,13 @@ var routes = [
     component: MyBlogs,
     layout: "/ezhuth"
   },
+  // {
+  //   path: "/viewblog",
+  //   name: "View Blog",
+  //   icon: "nc-icon nc-bullet-list-67",
+  //   component: Blog,
+  //   layout: "/ezhuth"
+  // },
   {
     path: "/user-profile",
     name: "User Profile",
