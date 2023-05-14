@@ -44,6 +44,7 @@ function Header(props) {
   const [color, setColor] = React.useState("transparent");
   const sidebarToggle = React.useRef();
   const location = useLocation();
+
   const toggle = () => {
     if (isOpen) {
       setColor("transparent");
@@ -137,7 +138,7 @@ function Header(props) {
         <Collapse isOpen={isOpen} navbar className="justify-content-end">
           {/* <form>
             <InputGroup className="no-border">
-              <Input placeholder="Search..." />
+              <Input type="text" placeholder="Search..."  />
               <InputGroupAddon addonType="append">
                 <InputGroupText>
                   <i className="nc-icon nc-zoom-split" />
@@ -166,12 +167,12 @@ function Header(props) {
                 </p>
               </DropdownToggle>
               <DropdownMenu right>
-                {/* <DropdownItem tag="a" href="/ezhuth/user-profile">
-                  Profile
-                  </DropdownItem> */}
-                <DropdownItem tag="a" onClick={handleLogout}>Logout</DropdownItem>
                 <DropdownItem tag="a" onClick={handleProfile}>
-                  Profile</DropdownItem>
+                  Profile
+                  </DropdownItem>
+                <DropdownItem tag="a" onClick={handleLogout}>Logout</DropdownItem>
+                {/* <DropdownItem tag="a" >
+                  Profile</DropdownItem> */}
                 {/* <DropdownItem tag="a">Something else here</DropdownItem> */}
               </DropdownMenu>
             </Dropdown>
