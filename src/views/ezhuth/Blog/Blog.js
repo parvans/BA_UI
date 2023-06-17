@@ -58,7 +58,7 @@ export default function Blog(props) {
                         <Image cloudName="dgupyenrw" publicId={data?.blog?.image} style={{ height: "300px", width: "100%" }} />
                         <CardText 
                         dangerouslySetInnerHTML={{__html:content}}
-                        style={{ marginTop: '20px', fontSize: '20px', fontWeight: 'bold' }}
+                        style={{ marginTop: '20px'}}
                         ></CardText>
                     </CardBody>
                 </Card>
