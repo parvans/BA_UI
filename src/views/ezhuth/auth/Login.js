@@ -240,7 +240,7 @@ export default function Login() {
                                             <>
                                                 <CardTitle tag='h1'>REGISTER</CardTitle>
                                                 <CardSubtitle tag='h6' className='mb-2 text-muted'>Create your account</CardSubtitle>
-                                                MongoDBCompass.lnk
+                                            
                                                 <FormGroup>
                                                     {/* <Label for='photo-upload' className='text-center w-100' style={{cursor:'pointer'}}>
                                         <span className='text-primary' onClick={photoUpload}>
