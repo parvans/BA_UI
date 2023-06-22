@@ -84,7 +84,7 @@ export default function MyBlogs() {
         } else {
             setContentError('')
         }
-        if (!image) {
+        if (!preview) {
             setImageError('Image is required')
         } else {
 
@@ -145,38 +145,12 @@ export default function MyBlogs() {
             <Row>
                 <Col md="12">
                     {viewBlog ?
+                    // View Blog
+                    
                     <Blog blog={viewBlog} setBlog={setViewBlog} />
-                        // (
-                        //     // View A Blog
-                        //     <Card style={{ maxWidth: "100%", minWidth: "100%", marginTop: '30px', borderColor: 'transparent' }} >
-                        //         <CardBody>
-                        //             <CardHeader style={{ display: 'flex', flexDirection: 'row', overflow: 'auto', alignItems: 'center' }}>
-                        //                 <div style={{ display: 'flex', flexDirection: 'row', overflow: 'auto', alignItems: 'center' }}>
-                        //                     <i className="nc-icon nc-minimal-left" style={{
-                        //                         cursor: 'pointer',
-                        //                         fontSize: '20px',
-                        //                         fontWeight: 'bold',
-                        //                         alignItems: 'center',
-                        //                         marginLeft: 'auto',
-                        //                         marginRight: '0px',
-                        //                         padding: '10px',
-                        //                         borderRadius: '50%',
-                        //                         backgroundColor: '#e9ecef'
-                        //                     }}
-                        //                         onClick={() => {
-                        //                             setViewBlog(!viewBlog)
-                        //                             console.log(viewBlog)
-                        //                         }
-                        //                         } />
-                        //                 </div>
-                        //                 <div style={{ display: 'flex', flexDirection: 'row', overflow: 'auto', alignItems: 'center', marginTop: '10px', marginLeft: '4px' }}>
-                        //                     <h5 className="title">View Blogs</h5>
-                        //                 </div>
-                        //             </CardHeader>
-                        //         </CardBody>
-                        //     </Card>
-                        // )
+                       
                          : openAdd ? (
+
                             // Add Blog
                             <Card style={{ maxWidth: "100%", minWidth: "100%", marginTop: '30px', borderColor: 'transparent' }} >
                                 <CardBody>
@@ -233,7 +207,8 @@ export default function MyBlogs() {
                                 </CardBody>
                             </Card>
                         ) : (
-                                        // Table of Blogs 
+                            // Table of Blogs 
+
                             <Card style={{ maxWidth: "100%", minWidth: "100%", marginTop: '30px', borderColor: 'transparent' }} >
                                 <CardBody>
                                     <CardHeader className="d-flex justify-content-between">

@@ -16,7 +16,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, { useState } from "react";
 
 // reactstrap components
 import {
@@ -33,7 +33,11 @@ import {
   Col
 } from "reactstrap";
 
+import tc from 'thousands-counter';
+
 function User() {
+  const [userData, setUserData] = useState();
+  
   return (
     <>
       <div className="content">
@@ -66,27 +70,27 @@ function User() {
                   <Row>
                     <Col className="ml-auto" lg="3" md="6" xs="6">
                       <h5>
-                        12 <br />
-                        <small>Files</small>
+                        {tc(1580,{digits: 2, uppercase: false})} <br />
+                        <small>Followers</small>
                       </h5>
                     </Col>
                     <Col className="ml-auto mr-auto" lg="4" md="6" xs="6">
                       <h5>
-                        2GB <br />
-                        <small>Used</small>
+                      {tc(10,{digits: 2, uppercase: false})} <br />
+                        <small>Followings</small>
                       </h5>
                     </Col>
                     <Col className="mr-auto" lg="3">
                       <h5>
-                        24,6$ <br />
-                        <small>Spent</small>
+                      {tc(10000,{digits: 2, uppercase: false})} <br />
+                        <small>Posts</small>
                       </h5>
                     </Col>
                   </Row>
                 </div>
               </CardFooter>
             </Card>
-            <Card>
+            {/* <Card>
               <CardHeader>
                 <CardTitle tag="h4">Team Members</CardTitle>
               </CardHeader>
@@ -181,7 +185,7 @@ function User() {
                   </li>
                 </ul>
               </CardBody>
-            </Card>
+            </Card> */}
           </Col>
           <Col md="8">
             <Card className="card-user">

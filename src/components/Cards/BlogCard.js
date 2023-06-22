@@ -10,11 +10,12 @@ export default function BlogCard(props) {
             <div className="card-header card-header-image">
                 <div className="author">
                     <div className='row' style={{ display: "flex",padding:"0px 10px" }}>
-                        {/* <div className='col-2' style={{ flexWrap: "wrap" }}>
-                            <a href="#pablo" onClick={e => e.preventDefault()}>
-                                <img src={require("assets/img/mike.jpg")} alt="auther" className="avatar img-raised" />
-                            </a> 
-                        </div> */}
+                    <img
+                      alt="auther"
+                      className="avatar border-gray mt-2"
+                      src={require("assets/img/mike.jpg")}
+                    />
+                       
                         <div className='col-10' style={{ flexWrap: "wrap",height:"30%" }}>
                             <span>
                                 <a href="#pablo" onClick={e => e.preventDefault()} style={{ fontSize: "1.1rem", fontWeight: "bold" }}>
