@@ -169,23 +169,6 @@ export default function MyBlogs() {
 
     const editBlog = async (e) => {
         e.preventDefault()
-        if (!title) {
-            setTitleError('Title is required')
-        } else {
-            setTitleError('')
-        }
-        if (!content) {
-            setContentError('Content is required')
-        } else {
-            setContentError('')
-        }
-        if (!preview) {
-            setImageError('Image is required')
-        } else {
-
-            setImageError('')
-        }
-
         try {
             const res = await editUserBlog({
                 title,
@@ -195,7 +178,9 @@ export default function MyBlogs() {
                 toast.error(res?.data?.message)
             } else {
                 toast.success(res?.data?.message)
-                setOpenAdd(!openAdd)
+                console.log(res);
+                setEdit(!edit)
+                // setOpenAdd(!openAdd)
             }
         } catch (error) {
             console.log(error);
