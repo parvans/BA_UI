@@ -7,6 +7,7 @@ import { addUserBlog } from 'utilities/apiService'
 import { deleteMyBlogs } from 'utilities/apiService'
 import { getMyBlogs } from 'utilities/apiService'
 import Blog from '../Blog/Blog'
+import { getABlog } from 'utilities/apiService'
 export default function MyBlogs() {
     const editorRef = useRef(null)
     const [blogs, setBlogs] = useState()
@@ -26,7 +27,6 @@ export default function MyBlogs() {
     const [contentError, setContentError] = useState('')
     const [imageError, setImageError] = useState('')
 
-
     const getBlogs = async () => {
         try {
             const response = await getMyBlogs()
@@ -37,6 +37,27 @@ export default function MyBlogs() {
             console.log(error);
         }
     }
+
+    // This is to get data for edit
+    const getBlogForEdit=async(id)=>{
+        try {
+            const res=await getABlog(id);
+            // console.log(res?.data);
+            if(res?.ok){
+                // setData(res?.data);
+                // setContent(res?.data?.blog?.description);
+                setTitle(res?.data?.blog?.title);
+                setContent(res?.data?.blog?.description);
+                // setPreview(res?.data?.blog?.image);
+
+                // console.log(res?.data?.blog?.title);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    // This is to maintain the delete warning modal
     const toggle = () => {
         setOpenModal(!openModal)
     }
@@ -45,10 +66,32 @@ export default function MyBlogs() {
         setLeave(!leave)
     }
 
+    const toggleEditOrAdd = () => {
+        if(edit){
+            setEdit(!edit)
+            toggleLeave()
+            setTitle('')
+            setContent('')
+            setImage('')
+            setPreview('')
+        }else{
+            setOpenAdd(!openAdd)
+            toggleLeave()
+            setTitle('')
+            setContent('')
+            setImage('')
+            setPreview('')
+        }
+    }
+
     const theLeave = () => {
         if(title || content || preview){
             setLeave(!leave)
-        }else{
+        } else if(edit){
+            setEdit(!edit)
+            setOpenAdd(!openAdd)
+        }
+        else{
             setOpenAdd(!openAdd)
         }
     }
@@ -121,7 +164,7 @@ export default function MyBlogs() {
 
     useEffect(() => {
         getBlogs()
-    }, [blogs, openModal])
+    }, [blogs, openModal, openAdd, leave, viewBlog,edit])
     return (
         <div className="content">
             {/* Delete Blog */}
@@ -143,14 +186,7 @@ export default function MyBlogs() {
                     Are you sure you want to leave this page?
                 </ModalBody>
                 <ModalFooter>
-                    <Button className="btn-round" color="danger" onClick={() => {
-                        setOpenAdd(!openAdd)
-                        toggleLeave()
-                        setTitle('')
-                        setContent('')
-                        setImage('')
-                        setPreview('')
-                    }}>Leave</Button>{' '}
+                    <Button className="btn-round" color="danger" onClick={toggleEditOrAdd}>Leave</Button>{' '}
                     <Button className="btn-round" color="secondary" onClick={toggleLeave}>Cancel</Button>
                 </ModalFooter>
             </Modal>
@@ -162,7 +198,7 @@ export default function MyBlogs() {
                     
                     <Blog blog={viewBlog} setBlog={setViewBlog} />
                        
-                         : openAdd ? (
+                         : openAdd|| edit ? (
 
                             // Add Blog
                             <Card style={{ maxWidth: "100%", minWidth: "100%", marginTop: '30px', borderColor: 'transparent' }} >
@@ -178,14 +214,15 @@ export default function MyBlogs() {
                                                 marginRight: '0px',
                                                 padding: '10px',
                                                 borderRadius: '50%',
-                                                backgroundColor: '#e9ecef'
-
-
+                                                backgroundColor: '#e9ecef',
+                                                marginBottom: '7px'
                                             }}
                                                 onClick={theLeave} />
                                         </div>
-                                        <div style={{ display: 'flex', flexDirection: 'row', overflow: 'auto', alignItems: 'center', marginTop: '10px', marginLeft: '4px' }}>
-                                            <h5 className="title">Create Blogs</h5>
+                                        <div style={{ display: 'flex', flexDirection: 'row', overflow: 'auto', alignItems: 'center', marginTop: '10px', marginLeft: '6px' }}>
+                                            <h5 className="title">
+                                                {edit? "Edit Blog" : "Create Blog"}
+                                                </h5>
                                         </div>
                                     </CardHeader>
 
@@ -208,7 +245,7 @@ export default function MyBlogs() {
                                             />
                                             {contentError && <p style={{ color: 'red' }}>{contentError}</p>}
                                         </div>
-                                        <div className="form-group">
+                                        {!edit&&(<><div className="form-group">
                                             <label htmlFor="exampleFormControlFile1">Image</label>
                                             <input type="file" className="form-control-file" id="exampleFormControlFile1" onChange={handleFileInput} value={image} />
                                             {imageError && <p style={{ color: 'red' }}>{imageError}</p>}
@@ -216,7 +253,11 @@ export default function MyBlogs() {
                                         {preview && (<div className="form-group">
                                             <img src={preview} alt="blog" style={{ width: '200px', height: '200px' }} />
                                         </div>)}
-                                        <Button className="btn btn-primary btn-md btn-round" onClick={addBlog}>Post Blog</Button>
+                                        </>
+                                        )}
+                                        <Button className="btn btn-primary btn-md btn-round" onClick={addBlog}>
+                                            {edit ? 'Edit Blog' : 'Post Blog'}
+                                            </Button>
                                     </Form>
                                 </CardBody>
                             </Card>
@@ -250,7 +291,16 @@ export default function MyBlogs() {
                                                                 setViewBlog(!viewBlog)
                                                                 localStorage.setItem("blogId", blog?._id)
                                                             }}>View</Button>
-                                                            <Button className="btn btn-warning btn-sm mr-2 btn-round" >Edit</Button>
+                                                            <Button className="btn btn-warning btn-sm mr-2 btn-round"
+                                                            onClick={async() => {
+                                                                setEdit(!edit)
+                                                                // localStorage.setItem("blogId", blog?._id)
+                                                                // setBlogId(blog?._id)
+                                                                // console.log(blogId);
+                                                                getBlogForEdit(blog?._id)
+                                                            }
+                                                            }
+                                                             >Edit</Button>
                                                             <Button className="btn btn-danger btn-sm btn-round" onClick={() => {
                                                                 toggle()
                                                                 setBlogId(blog?._id)

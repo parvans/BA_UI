@@ -24,7 +24,11 @@ export default function BlogCard(props) {
                                      
                                 </a>
 
-                                <p className="text-muted" style={{ fontSize: "0.8rem" }}>
+                                {/* <p className="text-muted" style={{ fontSize: "1.1rem", fontWeight: "bold" }}>
+                                    {author}
+                                </p> */}
+
+                                <p className="text-muted" style={{ fontSize: "0.7rem" }}>
                                     {moment.utc(date).fromNow()} 
                                 </p>
 
