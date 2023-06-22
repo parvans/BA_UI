@@ -294,7 +294,7 @@ export default function MyBlogs() {
                                         </div>)}
                                         </>
                                         )}
-                                        <Button className="btn btn-primary btn-md btn-round" onClick={addBlog}>
+                                        <Button className="btn btn-primary btn-md btn-round" onClick={edit? editBlog:addBlog}>
                                             {edit ? 'Edit Blog' : 'Post Blog'}
                                             </Button>
                                     </Form>
@@ -334,7 +334,7 @@ export default function MyBlogs() {
                                                             onClick={async() => {
                                                                 setEdit(!edit)
                                                                 // localStorage.setItem("blogId", blog?._id)
-                                                                // setBlogId(blog?._id)
+                                                                setBlogId(blog?._id)
                                                                 // console.log(blogId);
                                                                 getBlogForEdit(blog?._id)
                                                             }
