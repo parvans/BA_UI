@@ -12,9 +12,10 @@ export default function BlogCard(props) {
                     <div className='row' style={{ display: "flex",padding:"0px 10px" }}>
                     <img
                       alt="auther"
-                      className="avatar border-gray mt-2"
-                      src={require("assets/img/mike.jpg")}
+                      className="avatar border-gray mt-2 border ml-2"
+                      src="https://static.vecteezy.com/system/resources/previews/008/442/086/original/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg"
                     />
+                        
                        
                         <div className='col-10' style={{ flexWrap: "wrap",height:"30%" }}>
                             <span>
