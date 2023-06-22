@@ -197,7 +197,8 @@ export default function MyBlogs() {
                                         </div>
                                         <div className="form-group">
                                             <label htmlFor="exampleFormControlTextarea1">Content</label>
-                                            {/* <textarea className="form-control" id="exampleFormControlTextarea1" rows="3" cols={10}></textarea> */}
+
+                                            {/* Jodit Editor */}
                                             <JoditEditor
                                                 ref={editorRef}
                                                 value={content}
