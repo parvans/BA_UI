@@ -240,7 +240,7 @@ function Dashboard() {
             />
           </Col> */}
 
-          {
+          { blogs.length > 0 ?
             blogs.map((blog, index) => {
               return (
                 <Col md="8">
@@ -259,6 +259,7 @@ function Dashboard() {
               )
 
             })
+            :<h1>No Blogs</h1>
           }
           </Row>:
           <Blog
