@@ -8,6 +8,7 @@ import { deleteMyBlogs } from 'utilities/apiService'
 import { getMyBlogs } from 'utilities/apiService'
 import Blog from '../Blog/Blog'
 import { getABlog } from 'utilities/apiService'
+import { editUserBlog } from 'utilities/apiService'
 export default function MyBlogs() {
     const editorRef = useRef(null)
     const [blogs, setBlogs] = useState()
@@ -111,7 +112,8 @@ export default function MyBlogs() {
             console.log(error);
         }
     }
-    // This is Blogg add section ---------------------------------------------
+    // This is Blogg add section ----------------------------------------------------
+
     const handleFileInput = (e) => {
         const file = e.target.files[0]
         previewFile(file)
@@ -161,8 +163,44 @@ export default function MyBlogs() {
         }
     }
     //--------------------------------------------------------------------------------
-    
 
+
+    // This is Blogg edit section ----------------------------------------------------
+
+    const editBlog = async (e) => {
+        e.preventDefault()
+        if (!title) {
+            setTitleError('Title is required')
+        } else {
+            setTitleError('')
+        }
+        if (!content) {
+            setContentError('Content is required')
+        } else {
+            setContentError('')
+        }
+        if (!preview) {
+            setImageError('Image is required')
+        } else {
+
+            setImageError('')
+        }
+
+        try {
+            const res = await editUserBlog({
+                title,
+                description: content,
+            },blogId)
+            if (!res?.ok) {
+                toast.error(res?.data?.message)
+            } else {
+                toast.success(res?.data?.message)
+                setOpenAdd(!openAdd)
+            }
+        } catch (error) {
+            console.log(error);
+        }        
+    }
     useEffect(() => {
         getBlogs()
     }, [blogs, openModal, openAdd, leave, viewBlog,edit])
