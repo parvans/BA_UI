@@ -18,7 +18,7 @@
 */
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter, Route, Switch, Redirect} from "react-router-dom";
 
 import "bootstrap/dist/css/bootstrap.css";
 import "assets/scss/paper-dashboard.scss?v=1.3.0";
@@ -26,16 +26,19 @@ import "assets/demo/demo.css";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 
 import AdminLayout from "layouts/Admin.js";
-import Login from "views/Login.js";
-
+import Login from "views/ezhuth/auth/Login.js";
+import Blog from "views/ezhuth/Blog/Blog";
+import { AuthContextProvider } from "context/AuthContext";
 const root = ReactDOM.createRoot(document.getElementById("root"));
-
+const token=localStorage.getItem("ezuth-token");
 root.render(
+  <AuthContextProvider>
   <BrowserRouter>
     <Switch>
-      <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
-      <Route path="/auth/login" render={(props) => <Login {...props} />} />
-      {/* <Redirect to="/admin/dashboard" /> */}
+      <Route path="/ezhuth" render={(props) => <AdminLayout {...props} />} />
+      {!token&&<Route path="/auth/login" render={(props) => <Login {...props} />} />}
+      {!token ? <Redirect from={`/`} to="/auth/login" /> : <Redirect from={`/`} to="/ezhuth/home" />}
     </Switch>
   </BrowserRouter>
+  </AuthContextProvider>
 );

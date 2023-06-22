@@ -1,45 +1,46 @@
-/*!
-
-=========================================================
-* Paper Dashboard React - v1.3.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/paper-dashboard-react
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-* Licensed under MIT (https://github.com/creativetimofficial/paper-dashboard-react/blob/main/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-import React from "react";
+import BlogCard from "components/Cards/BlogCard";
+import React, { useEffect, useState } from "react";
 // react plugin used to create charts
-import { Line, Pie } from "react-chartjs-2";
+// import { Line, Pie } from "react-chartjs-2";
 // reactstrap components
 import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  CardTitle,
+  // Card,
+  // CardHeader,
+  // CardBody,
+  // CardFooter,
+  // CardTitle,
   Row,
-  Col
+  Col,
 } from "reactstrap";
+import { getAllBlogs } from "utilities/apiService";
+import Blog from "./ezhuth/Blog/Blog";
 // core components
-import {
-  dashboard24HoursPerformanceChart,
-  dashboardEmailStatisticsChart,
-  dashboardNASDAQChart
-} from "variables/charts.js";
+// import {
+//   dashboard24HoursPerformanceChart,
+//   dashboardEmailStatisticsChart,
+//   dashboardNASDAQChart
+// } from "variables/charts.js";
+
 
 function Dashboard() {
+  const [blogs, setBlogs] = useState([]);
+  const [blog, setBlog] = useState(false);
+  const allBlogs=async()=>{
+    try {
+      const response=await getAllBlogs();
+      // console.log(response?.data?.data);
+      setBlogs(response?.data?.data);
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
+  useEffect(() => {
+    allBlogs();
+  }, []);
   return (
     <>
-      <div className="content">
+      {/* <div className="content">
         <Row>
           <Col lg="3" md="6" sm="6">
             <Card className="card-stats">
@@ -146,6 +147,7 @@ function Dashboard() {
             </Card>
           </Col>
         </Row>
+
         <Row>
           <Col md="12">
             <Card>
@@ -224,7 +226,47 @@ function Dashboard() {
             </Card>
           </Col>
         </Row>
+      </div> */}
+
+      <div className="content">
+        {!blog?<Row className="justify-content-center">
+          {/* <Col md="8">
+            <BlogCard 
+              title="Why do we use it?"
+              description="It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like)."
+              // image={require("assets/img/bg5.jpg")}
+              author="Mike Andrew"
+              date="2023-03-18T08:16:48.412+00:00"
+            />
+          </Col> */}
+
+          {
+            blogs.map((blog, index) => {
+              return (
+                <Col md="8">
+                  <BlogCard 
+                  key={index}
+                    title={blog.title}
+                    image={blog.image}
+                    author={blog.userId?.name}
+                    date={blog.createdAt}
+                    id={blog._id}
+                    blog={blog}
+                    setBlog={setBlog}
+                  />
+                  
+                </Col>
+              )
+
+            })
+          }
+          </Row>:
+          <Blog
+          blog={blog}
+          setBlog={setBlog}
+          />}
       </div>
+
     </>
   );
 }

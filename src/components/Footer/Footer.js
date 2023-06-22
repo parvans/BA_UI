@@ -27,7 +27,7 @@ function Footer(props) {
     <footer className={"footer" + (props.default ? " footer-default" : "")}>
       <Container fluid={props.fluid ? true : false}>
         <Row>
-          <nav className="footer-nav">
+          {/* <nav className="footer-nav">
             <ul>
               <li>
                 <a href="https://www.creative-tim.com" target="_blank">
@@ -45,11 +45,11 @@ function Footer(props) {
                 </a>
               </li>
             </ul>
-          </nav>
+          </nav> */}
           <div className="credits ml-auto">
             <div className="copyright">
               &copy; {1900 + new Date().getYear()}, made with{" "}
-              <i className="fa fa-heart heart" /> by Creative Tim
+              <i className="fa fa-heart heart" /> by Parvan S
             </div>
           </div>
         </Row>
