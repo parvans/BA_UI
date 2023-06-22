@@ -19,6 +19,8 @@ export default function MyBlogs() {
     const [preview, setPreview] = useState('')
     const [leave, setLeave] = useState(false)
     const [viewBlog, setViewBlog] = useState(false)
+    //recognize edit or add
+    const [edit, setEdit] = useState(false)
     //errors
     const [titleError, setTitleError] = useState('')
     const [contentError, setContentError] = useState('')
@@ -41,6 +43,14 @@ export default function MyBlogs() {
 
     const toggleLeave = () => {
         setLeave(!leave)
+    }
+
+    const theLeave = () => {
+        if(title || content || preview){
+            setLeave(!leave)
+        }else{
+            setOpenAdd(!openAdd)
+        }
     }
     const deleteBlog = async () => {
         setOpenModal(!openModal)
@@ -107,6 +117,7 @@ export default function MyBlogs() {
             console.log(error);
         }
     }
+    
 
     useEffect(() => {
         getBlogs()
@@ -124,6 +135,7 @@ export default function MyBlogs() {
                     <Button className="btn-round" color="secondary" onClick={toggle}>Cancel</Button>
                 </ModalFooter>
             </Modal>
+
             {/* Leave modal in add blog  */}
             <Modal isOpen={leave} toggle={toggleLeave} className="modal-dialog-centered">
                 <ModalHeader toggle={toggleLeave}>Leave Page</ModalHeader>
@@ -142,6 +154,7 @@ export default function MyBlogs() {
                     <Button className="btn-round" color="secondary" onClick={toggleLeave}>Cancel</Button>
                 </ModalFooter>
             </Modal>
+
             <Row>
                 <Col md="12">
                     {viewBlog ?
@@ -169,7 +182,7 @@ export default function MyBlogs() {
 
 
                                             }}
-                                                onClick={toggleLeave} />
+                                                onClick={theLeave} />
                                         </div>
                                         <div style={{ display: 'flex', flexDirection: 'row', overflow: 'auto', alignItems: 'center', marginTop: '10px', marginLeft: '4px' }}>
                                             <h5 className="title">Create Blogs</h5>
