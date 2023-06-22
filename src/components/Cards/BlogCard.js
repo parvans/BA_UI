@@ -10,11 +10,13 @@ export default function BlogCard(props) {
             <div className="card-header card-header-image">
                 <div className="author">
                     <div className='row' style={{ display: "flex",padding:"0px 10px" }}>
-                        {/* <div className='col-2' style={{ flexWrap: "wrap" }}>
-                            <a href="#pablo" onClick={e => e.preventDefault()}>
-                                <img src={require("assets/img/mike.jpg")} alt="auther" className="avatar img-raised" />
-                            </a> 
-                        </div> */}
+                    <img
+                      alt="auther"
+                      className="avatar border-gray mt-2 border ml-2"
+                      src="https://static.vecteezy.com/system/resources/previews/008/442/086/original/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg"
+                    />
+                        
+                       
                         <div className='col-10' style={{ flexWrap: "wrap",height:"30%" }}>
                             <span>
                                 <a href="#pablo" onClick={e => e.preventDefault()} style={{ fontSize: "1.1rem", fontWeight: "bold" }}>
@@ -22,7 +24,11 @@ export default function BlogCard(props) {
                                      
                                 </a>
 
-                                <p className="text-muted" style={{ fontSize: "0.8rem" }}>
+                                {/* <p className="text-muted" style={{ fontSize: "1.1rem", fontWeight: "bold" }}>
+                                    {author}
+                                </p> */}
+
+                                <p className="text-muted" style={{ fontSize: "0.7rem" }}>
                                     {moment.utc(date).fromNow()} 
                                 </p>
 
