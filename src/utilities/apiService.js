@@ -1,6 +1,5 @@
 //  ******************** Base URL ***********************
 let baseUrl = "http://localhost:8000/api/";
-// let baseUrl = "https://ezuth.herokuapp.com/api/";
 //  ******************** Token ***********************
 var token = localStorage.getItem('ezuth-token')
 //  ******************** User API ***********************
