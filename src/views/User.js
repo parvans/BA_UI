@@ -16,7 +16,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // reactstrap components
 import {
@@ -34,10 +34,20 @@ import {
 } from "reactstrap";
 
 import tc from 'thousands-counter';
+import { userProfile } from "utilities/apiService";
 
 function User() {
   const [userData, setUserData] = useState();
-  
+  const getUserData=async()=>{
+    const res=await userProfile();
+    if(res?.ok){
+      console.log(res?.data?.data);
+      setUserData(res?.data?.data)
+    }
+  }
+  useEffect(() => {
+    getUserData();
+  }, [])
   return (
     <>
       <div className="content">
@@ -55,7 +65,7 @@ function User() {
                       className="avatar border-gray"
                       src={require("assets/img/mike.jpg")}
                     />
-                    <h5 className="title">Chet Faker</h5>
+                    <h5 className="title">{userData?.name}</h5>
                   </a>
                   <p className="description">@chetfaker</p>
                 </div>
@@ -70,19 +80,19 @@ function User() {
                   <Row>
                     <Col className="ml-auto" lg="3" md="6" xs="6">
                       <h5>
-                        {tc(1580,{digits: 2, uppercase: false})} <br />
+                        {tc(userData?.followers.length,{digits: 2, uppercase: false})} <br />
                         <small>Followers</small>
                       </h5>
                     </Col>
                     <Col className="ml-auto mr-auto" lg="4" md="6" xs="6">
                       <h5>
-                      {tc(10,{digits: 2, uppercase: false})} <br />
+                      {tc(userData?.followers.length,{digits: 2, uppercase: false})} <br />
                         <small>Followings</small>
                       </h5>
                     </Col>
                     <Col className="mr-auto" lg="3">
                       <h5>
-                      {tc(10000,{digits: 2, uppercase: false})} <br />
+                      {tc(userData?.blogs.length,{digits: 2, uppercase: false})} <br />
                         <small>Posts</small>
                       </h5>
                     </Col>

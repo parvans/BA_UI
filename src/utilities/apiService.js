@@ -1,6 +1,5 @@
 //  ******************** Base URL ***********************
 let baseUrl = "http://localhost:8000/api/";
-// let baseUrl = "https://ezuth.herokuapp.com/api/";
 //  ******************** Token ***********************
 var token = localStorage.getItem('ezuth-token')
 //  ******************** User API ***********************
@@ -187,7 +186,27 @@ export const editUserBlog = async (body,id) => {
         let data = await response.json();
         return { data: data, ok: false }
     }
-    return { ok: true }
+    let data = await response?.json();
+    return { data: data, ok: true }
 }
+
+export const userProfile = async () => {
+    const requestOptions = {
+        method: "GET",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json",
+            "auth-token": token
+        },
+    }
+    const response = await fetch(baseUrl + "users/userprofile", requestOptions)
+    if (!response.ok) {
+        let data = await response.json();
+        return { data: data, ok: false }
+    }
+    let data = await response.json();
+    return { data: data, ok: true }
+}
+
 
 

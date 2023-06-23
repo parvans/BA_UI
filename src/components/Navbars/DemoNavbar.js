@@ -33,7 +33,8 @@ import {
   InputGroup,
   InputGroupText,
   InputGroupAddon,
-  Input
+  Input,
+  Badge
 } from "reactstrap";
 
 import routes from "routes.js";
@@ -136,7 +137,7 @@ function Header(props) {
           <span className="navbar-toggler-bar navbar-kebab" />
         </NavbarToggler>
         <Collapse isOpen={isOpen} navbar className="justify-content-end">
-          {/* <form>
+          <form>
             <InputGroup className="no-border">
               <Input type="text" placeholder="Search..."  />
               <InputGroupAddon addonType="append">
@@ -145,7 +146,7 @@ function Header(props) {
                 </InputGroupText>
               </InputGroupAddon>
             </InputGroup>
-          </form> */}
+          </form>
           <Nav navbar>
             {/* <NavItem>
               <Link to="#pablo" className="nav-link btn-magnify">
@@ -176,14 +177,18 @@ function Header(props) {
                 {/* <DropdownItem tag="a">Something else here</DropdownItem> */}
               </DropdownMenu>
             </Dropdown>
-            {/* <NavItem>
-              <Link to="#pablo" className="nav-link btn-rotate">
+             <NavItem>
+              {/* <Link to="#pablo" className="nav-link btn-rotate">
                 <i className="nc-icon nc-settings-gear-65" />
                 <p>
                   <span className="d-lg-none d-md-block">Account</span>
                 </p>
-              </Link>
-            </NavItem> */}
+              </Link> */}
+              {/* <Badge color="danger" pill style={{ position: "absolute", top: "0px", right: "0px" }} >
+                1000
+              </Badge> */}
+
+            </NavItem>
           </Nav>
         </Collapse>
       </Container>
