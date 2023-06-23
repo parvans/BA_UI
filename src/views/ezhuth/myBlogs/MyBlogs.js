@@ -178,9 +178,7 @@ export default function MyBlogs() {
                 toast.error(res?.data?.message)
             } else {
                 toast.success(res?.data?.message)
-                console.log(res);
                 setEdit(!edit)
-                // setOpenAdd(!openAdd)
             }
         } catch (error) {
             console.log(error);

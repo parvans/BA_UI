@@ -187,7 +187,9 @@ export const editUserBlog = async (body,id) => {
         let data = await response.json();
         return { data: data, ok: false }
     }
-    return { ok: true }
+    let data = await response?.json();
+    return { data: data, ok: true }
 }
+
 
 
