@@ -16,7 +16,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // reactstrap components
 import {
@@ -34,10 +34,20 @@ import {
 } from "reactstrap";
 
 import tc from 'thousands-counter';
+import { userProfile } from "utilities/apiService";
 
 function User() {
   const [userData, setUserData] = useState();
-
+  const getUserData=async()=>{
+    const res=await userProfile();
+    if(res?.ok){
+      console.log(res?.data);
+      setUserData(res?.data)
+    }
+  }
+  useEffect(() => {
+    getUserData();
+  }, [])
   return (
     <>
       <div className="content">
