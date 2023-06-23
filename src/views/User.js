@@ -37,7 +37,7 @@ import tc from 'thousands-counter';
 
 function User() {
   const [userData, setUserData] = useState();
-  
+
   return (
     <>
       <div className="content">

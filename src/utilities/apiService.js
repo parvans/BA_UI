@@ -190,5 +190,23 @@ export const editUserBlog = async (body,id) => {
     return { data: data, ok: true }
 }
 
+export const userProfile = async () => {
+    const requestOptions = {
+        method: "GET",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json",
+            "auth-token": token
+        },
+    }
+    const response = await fetch(baseUrl + "users/userprofile", requestOptions)
+    if (!response.ok) {
+        let data = await response.json();
+        return { data: data, ok: false }
+    }
+    let data = await response.json();
+    return { data: data, ok: true }
+}
+
 
 
