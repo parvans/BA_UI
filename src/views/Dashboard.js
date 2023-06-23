@@ -243,7 +243,7 @@ function Dashboard() {
           { blogs.length > 0 ?
             blogs.map((blog, index) => {
               return (
-                <Col md="8">
+                <Col md="8" key={index}>
                   <BlogCard 
                   key={index}
                     title={blog.title}
