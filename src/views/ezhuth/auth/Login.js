@@ -88,6 +88,33 @@ export default function Login() {
         } else {
             setPasswordError('')
         }
+
+        if(password.length < 6){
+            setPasswordError('Password must be at least 6 characters')
+        }else{
+            setPasswordError('')
+        }
+        if(password.length > 15){
+            setPasswordError('Password must be at most 15 characters')
+        }else{
+            setPasswordError('')
+        }
+
+        if(password.search(/[a-z]/i) < 0){
+            setPasswordError('Password must contain at least one letter')
+        }else{
+            setPasswordError('')
+        }
+        if(password.search(/[0-9]/) < 0){
+            setPasswordError('Password must contain at least one digit')
+        }else{
+            setPasswordError('')
+        }
+        if(password.search(/[!@#$%^&*]/) < 0){
+            setPasswordError('Password must contain at least one special character')
+        }else{
+            setPasswordError('')
+        }
         if (confirmPassword === '') {
             setConfirmPasswordError('Confirm Password is required')
         } else if (confirmPassword !== password) {
@@ -120,7 +147,6 @@ export default function Login() {
         } else {
             setEmailError('')
             const res = await verifyUserEmail({ email: email })
-            console.log(res);
             if (res.ok) {
                 toast.success('OTP sent to your email')
                 setTimeout(() => {
