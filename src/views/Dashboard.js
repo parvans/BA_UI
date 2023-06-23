@@ -246,6 +246,7 @@ function Dashboard() {
                     id={blog._id}
                     blog={blog}
                     setBlog={setBlog}
+                    likes={blog.likes?.length}
                   />
                   
                 </Col>
