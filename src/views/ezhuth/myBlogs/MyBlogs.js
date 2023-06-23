@@ -2,7 +2,7 @@ import JoditEditor from 'jodit-pro-react'
 import moment from 'moment'
 import React, { useEffect, useRef, useState } from 'react'
 import { Toaster, toast } from 'react-hot-toast'
-import { Card, CardBody, CardHeader, Col, Row, Table, Modal, ModalHeader, ModalBody, ModalFooter, Button, Form } from 'reactstrap'
+import { Card, CardBody, CardHeader, Col, Row, Table, Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, Spinner } from 'reactstrap'
 import { addUserBlog } from 'utilities/apiService'
 import { deleteMyBlogs } from 'utilities/apiService'
 import { getMyBlogs } from 'utilities/apiService'
@@ -21,6 +21,7 @@ export default function MyBlogs() {
     const [preview, setPreview] = useState('')
     const [leave, setLeave] = useState(false)
     const [viewBlog, setViewBlog] = useState(false)
+    const [loading, setLoading] = useState(false)
     //recognize edit or add
     const [edit, setEdit] = useState(false)
     //errors
@@ -144,8 +145,9 @@ export default function MyBlogs() {
         } else {
 
             setImageError('')
+            setLoading(true)
         }
-
+        
         try {
             const res = await addUserBlog({
                 title,
@@ -155,8 +157,13 @@ export default function MyBlogs() {
             if (!res?.ok) {
                 toast.error(res?.data?.message)
             } else {
+                setTimeout(() => {
+                    setLoading(false)
+                }, 1000);
+                if(!loading){
                 toast.success(res?.data?.message)
                 setOpenAdd(!openAdd)
+                }
             }
         } catch (error) {
             console.log(error);
@@ -170,6 +177,7 @@ export default function MyBlogs() {
     const editBlog = async (e) => {
         e.preventDefault()
         try {
+            setLoading(true)
             const res = await editUserBlog({
                 title,
                 description: content,
@@ -177,8 +185,15 @@ export default function MyBlogs() {
             if (!res?.ok) {
                 toast.error(res?.data?.message)
             } else {
+                setTimeout(() => {
+                    setLoading(false)
+                }, 1000);
+                if(!loading){
                 toast.success(res?.data?.message)
                 setEdit(!edit)
+                setTitle('')
+                setContent('')
+                }
             }
         } catch (error) {
             console.log(error);
@@ -278,7 +293,8 @@ export default function MyBlogs() {
                                         </>
                                         )}
                                         <Button className="btn btn-primary btn-md btn-round" onClick={edit? editBlog:addBlog}>
-                                            {edit ? 'Edit Blog' : 'Post Blog'}
+                                            {/* {edit ? 'Edit Blog' : 'Post Blog'} */}
+                                            {loading ? <Spinner color="light" /> : edit ? 'Edit Blog' : 'Post Blog'}
                                             </Button>
                                     </Form>
                                 </CardBody>

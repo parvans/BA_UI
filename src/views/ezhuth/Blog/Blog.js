@@ -55,7 +55,7 @@ export default function Blog(props) {
                             <CardText style={{ fontSize: '15px', fontWeight: 'bold' }}>{moment.utc(data?.blog?.date).format("DD-MM-YYYY")}</CardText>
                             
                         </CardHeader>
-                        <Image cloudName="dgupyenrw" publicId={data?.blog?.image} style={{ height: "300px", width: "100%" }} />
+                        <Image cloudName="dgupyenrw" publicId={data?.blog?.image} style={{ height: "500px", width: "100%" }} />
                         <CardText 
                         dangerouslySetInnerHTML={{__html:content}}
                         style={{ marginTop: '20px'}}
