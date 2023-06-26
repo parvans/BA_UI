@@ -49,7 +49,7 @@ function Footer(props) {
           <div className="credits ml-auto">
             <div className="copyright">
               &copy; {1900 + new Date().getYear()}, made with{" "}
-              <i className="fa fa-heart heart" /> by  <a href="dsdsd">Parvan S</a> 
+              <i className="fa fa-heart heart" /> by  <a href="https://www.linkedin.com/in/parvan-s-720306189" target="_blank">Parvan S</a> 
             </div>
           </div>
         </Row>

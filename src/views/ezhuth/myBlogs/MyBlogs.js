@@ -2,7 +2,7 @@ import JoditEditor from 'jodit-pro-react'
 import moment from 'moment'
 import React, { useEffect, useRef, useState } from 'react'
 import { Toaster, toast } from 'react-hot-toast'
-import { Card, CardBody, CardHeader, Col, Row, Table, Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, Spinner } from 'reactstrap'
+import { Card, CardBody, CardHeader, Col, Row, Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, Spinner } from 'reactstrap'
 import { addUserBlog } from 'utilities/apiService'
 import { deleteMyBlogs } from 'utilities/apiService'
 import { getMyBlogs } from 'utilities/apiService'
@@ -11,10 +11,13 @@ import { getABlog } from 'utilities/apiService'
 import { editUserBlog } from 'utilities/apiService'
 import {DataTable} from 'primereact/datatable'
 import {Column} from 'primereact/column'
-import {FilterMatchMode, PrimeIcons} from 'primereact/api'
+import {FilterMatchMode} from 'primereact/api'
 import "primereact/resources/themes/saga-blue/theme.css"
 import "primereact/resources/primereact.css"
 import { InputText } from 'primereact/inputtext'
+import nodata from "assets/img/nodata.png";
+import 'primeicons/primeicons.css';
+        
 export default function MyBlogs() {
     const editorRef = useRef(null)
     const [blogs, setBlogs] = useState()
@@ -341,65 +344,13 @@ export default function MyBlogs() {
                                         <h5 className="title">My Blogs</h5>
                                         <Button className="btn btn-primary btn-md btn-round" onClick={() => setOpenAdd(!openAdd)}>Add Blog</Button>
                                     </CardHeader>
-                                    {blogs?.length === 0 ? <h5 className="text-center">No Blogs Found</h5> :
-                                        // <Table responsiveTag={true} hover onScroll={(e) => console.log(e)} style={{ overflowX: 'scroll' }}>
-                                        //     <thead className="text-primary">
-                                        //         <tr>
-                                        //             <th>#</th>
-                                        //             <th>Blog</th>
-                                        //             <th className="text-center">Date</th>
-                                        //             <th className="text-center">Actions</th>
-                                        //         </tr>
-                                        //     </thead>
-                                        //     <tbody>
-                                        //         {blogs?.map((blog, index) => (
-                                        //             <tr key={index}>
-                                        //                 <td>{index + 1}</td>
-                                        //                 <td>{blog?.title}</td>
-                                        //                 <td className="text-center">{moment(blog?.createdAt).format('DD-MM-YYYY')}</td>
-                                        //                 <td className="text-center">
-                                        //                     <Button className="btn btn-success btn-sm mr-2 btn-round mt-1" onClick={() => {
-                                        //                         setViewBlog(!viewBlog)
-                                        //                         localStorage.setItem("blogId", blog?._id)
-                                        //                     }}>View</Button>
-                                        //                     <Button className="btn btn-warning btn-sm mr-2 btn-round mt-1"
-                                        //                     onClick={async() => {
-                                        //                         setEdit(!edit)
-                                        //                         // localStorage.setItem("blogId", blog?._id)
-                                        //                         setBlogId(blog?._id)
-                                        //                         // console.log(blogId);
-                                        //                         getBlogForEdit(blog?._id)
-                                        //                     }
-                                        //                     }
-                                        //                      >Edit</Button>
-                                        //                     <Button className="btn btn-danger btn-sm btn-round mt-1" onClick={() => {
-                                        //                         toggle()
-                                        //                         setBlogId(blog?._id)
-                                        //                     }}>Delete</Button>
-                                        //                 </td>
-                                        //             </tr>
-                                        //         ))}
-                                        //     </tbody>
-                                        // </Table>
+                                    {blogs==null ? (
+                                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                                            <img src={nodata} alt="empty" style={{ width: '500px', height: '500px' }} />
+                                        </div>
+                                    ) :
+                                      
                                         <>
-                                        
-                                        {/* <InputText
-                                        className="p-mb-2 p-d-block p-mt-2"
-                                        placeholder="Search..."
-                                        value={filters['global'] ? filters['global'].value : ''}
-                                        type='search'
-                                        onInput={
-                                            (e) => {
-                                                setFilters({
-                                                    global: {
-                                                        value: e.target.value,
-                                                        matchMode: FilterMatchMode.CONTAINS
-                                                    }
-                                                })
-                                            }
-                                        }  
-                                        /> */}
-                                        
                                         <DataTable value={blogs} showGridlines  header={header} filters={filters} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} paginatorLeft filterIcon>
                                             <Column field="S.No" header="S.No" body={(e) => blogs.indexOf(e) + 1} />
                                             <Column field="title" header="Title" sortable />
@@ -413,9 +364,7 @@ export default function MyBlogs() {
                                                     <Button className="btn btn-warning btn-sm mr-2 btn-round mt-1"
                                                         onClick={async () => {
                                                             setEdit(!edit)
-                                                            // localStorage.setItem("blogId", blog?._id)
                                                             setBlogId(e._id)
-                                                            // console.log(blogId);
                                                             getBlogForEdit(e._id)
                                                         }
                                                         }
@@ -424,6 +373,15 @@ export default function MyBlogs() {
                                                         toggle()
                                                         setBlogId(e._id)
                                                     }}>Delete</Button>
+                                                    {/* <i className="pi pi-eye"  style={{ fontSize: '1.4rem', cursor: 'pointer',color: 'skyblue' }}
+                                                    
+                                                    onClick={() => {
+                                                        setViewBlog(!viewBlog)
+                                                        localStorage.setItem("blogId", e._id)
+                                                    }}
+                                                    />
+                                                    <i className="pi pi-pencil ml-2" style={{ fontSize: '1.4rem', cursor: 'pointer',color: 'green' }}/>
+                                                    <i className="pi pi-trash ml-2" style={{ fontSize: '1.4rem', cursor: 'pointer',color: 'red' }}/> */}
                                                 </>
                                             )}/>
                                         </DataTable>

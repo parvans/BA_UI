@@ -14,6 +14,7 @@ import {
 } from "reactstrap";
 import { getAllBlogs } from "utilities/apiService";
 import Blog from "./ezhuth/Blog/Blog";
+import nodata from "assets/img/nodata.png";
 // core components
 // import {
 //   dashboard24HoursPerformanceChart,
@@ -251,7 +252,10 @@ function Dashboard() {
               )
 
             })
-            :<h1>No Blogs</h1>
+            :( <div className="text-center">
+              {/* <h3>No Blogs Found</h3> */}
+              <img src={nodata} alt="no blogs found" style={{width:"100%"}}/>
+              </div>)
           }
           </Row>:
           <Blog
