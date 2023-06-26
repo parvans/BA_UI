@@ -72,13 +72,13 @@ var routes = [
   //   layout:"/auth"
   // },
 
-  // {
-  //   path: "/icons",
-  //   name: "Icons",
-  //   icon: "nc-icon nc-diamond",
-  //   component: Icons,
-  //   layout: "/ezhuth"
-  // },
+  {
+    path: "/icons",
+    name: "Icons",
+    icon: "nc-icon nc-diamond",
+    component: Icons,
+    layout: "/ezhuth"
+  },
   // {
   //   path: "/maps",
   //   name: "Maps",

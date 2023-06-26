@@ -57,17 +57,6 @@ export default function BlogCard(props) {
                 
             </div>
 
-            <div className="card-footer justify-content-center">
-                <div className="stats ml-auto">
-                    <h6 className="text-muted" style={{ fontSize: "0.8rem" }}>
-                    <span className="licon icon-like"></span>{likes}
-                    {/* <span class="licon icon-com ml-3"></span><a href="#">12</a> */}
-                    <span className="licon icon-dat ml-3"></span>{moment.utc(date).utcOffset("+05:30").format("DD MMM YYYY")}
-                    </h6>
-                </div>
-            </div>
-
-
 
 
         </div>

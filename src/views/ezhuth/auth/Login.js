@@ -9,6 +9,7 @@ import { verifyUserOtp } from 'utilities/apiService'
 import { userRegister } from 'utilities/apiService'
 import { userLogin } from 'utilities/apiService'
 import { UserAuth } from '../../../context/AuthContext'
+import { Password } from 'primereact/password';
 export default function Login() {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')

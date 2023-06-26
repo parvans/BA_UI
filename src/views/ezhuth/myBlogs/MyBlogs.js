@@ -11,7 +11,7 @@ import { getABlog } from 'utilities/apiService'
 import { editUserBlog } from 'utilities/apiService'
 import {DataTable} from 'primereact/datatable'
 import {Column} from 'primereact/column'
-import {FilterMatchMode} from 'primereact/api'
+import {FilterMatchMode, PrimeIcons} from 'primereact/api'
 import "primereact/resources/themes/saga-blue/theme.css"
 import "primereact/resources/primereact.css"
 import { InputText } from 'primereact/inputtext'
@@ -213,6 +213,25 @@ export default function MyBlogs() {
             console.log(error);
         }        
     }
+    const renderHeader = () => {
+        return (
+            <div className="flex justify-content-end">
+                <span className="p-input-icon-left">
+                <i className="nc-icon nc-zoom-split" />
+                    <InputText value={filters['global'] ? filters['global'].value : ''} onChange={(e)=>{
+                        setFilters({
+                            global: {
+                                value: e.target.value,
+                                matchMode: FilterMatchMode.CONTAINS
+                            }
+                        })
+                    }} placeholder="Keyword Search" />
+                </span>
+            </div>
+        );
+    };
+
+    const header = renderHeader();
     useEffect(() => {
         getBlogs()
     }, [blogs, openModal, openAdd, leave, viewBlog,edit])
@@ -364,7 +383,7 @@ export default function MyBlogs() {
                                         // </Table>
                                         <>
                                         
-                                        <InputText
+                                        {/* <InputText
                                         className="p-mb-2 p-d-block p-mt-2"
                                         placeholder="Search..."
                                         value={filters['global'] ? filters['global'].value : ''}
@@ -379,11 +398,11 @@ export default function MyBlogs() {
                                                 })
                                             }
                                         }  
-                                        />
+                                        /> */}
                                         
-                                        <DataTable value={blogs} filters={filters} paginator rows={5}>
+                                        <DataTable value={blogs} showGridlines  header={header} filters={filters} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} paginatorLeft filterIcon>
                                             <Column field="S.No" header="S.No" body={(e) => blogs.indexOf(e) + 1} />
-                                            <Column field="title" header="Title" sortable/>
+                                            <Column field="title" header="Title" sortable />
                                             <Column field="createdAt" header="Date" body={(e) => moment(e.createdAt).format('DD-MM-YYYY')} sortable/>
                                             <Column header="Actions" body={(e) => (
                                                 <>
