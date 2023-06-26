@@ -14,7 +14,6 @@ import {
 } from "reactstrap";
 import { getAllBlogs } from "utilities/apiService";
 import Blog from "./ezhuth/Blog/Blog";
-import Blogg from "components/Cards/New/Blogg";
 // core components
 // import {
 //   dashboard24HoursPerformanceChart,
@@ -230,7 +229,6 @@ function Dashboard() {
       </div> */}
 
       <div className="content">
-        {/* <Blogg /> */}
         {!blog?<Row className="justify-content-center">
 
           { blogs.length > 0 ?

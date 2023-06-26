@@ -9,6 +9,12 @@ import { getMyBlogs } from 'utilities/apiService'
 import Blog from '../Blog/Blog'
 import { getABlog } from 'utilities/apiService'
 import { editUserBlog } from 'utilities/apiService'
+import {DataTable} from 'primereact/datatable'
+import {Column} from 'primereact/column'
+import {FilterMatchMode} from 'primereact/api'
+import "primereact/resources/themes/saga-blue/theme.css"
+import "primereact/resources/primereact.css"
+import { InputText } from 'primereact/inputtext'
 export default function MyBlogs() {
     const editorRef = useRef(null)
     const [blogs, setBlogs] = useState()
@@ -28,6 +34,14 @@ export default function MyBlogs() {
     const [titleError, setTitleError] = useState('')
     const [contentError, setContentError] = useState('')
     const [imageError, setImageError] = useState('')
+
+    //Filter
+    const [filters, setFilters] = useState({
+        global: {
+            value: null,
+            matchMode: FilterMatchMode.CONTAINS
+        }
+    })
 
     const getBlogs = async () => {
         try {
@@ -309,45 +323,93 @@ export default function MyBlogs() {
                                         <Button className="btn btn-primary btn-md btn-round" onClick={() => setOpenAdd(!openAdd)}>Add Blog</Button>
                                     </CardHeader>
                                     {blogs?.length === 0 ? <h5 className="text-center">No Blogs Found</h5> :
-                                        <Table responsiveTag={true} hover onScroll={(e) => console.log(e)} style={{ overflowX: 'scroll' }}>
-                                            <thead className="text-primary">
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Blog</th>
-                                                    <th className="text-center">Date</th>
-                                                    <th className="text-center">Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {blogs?.map((blog, index) => (
-                                                    <tr key={index}>
-                                                        <td>{index + 1}</td>
-                                                        <td>{blog?.title}</td>
-                                                        <td className="text-center">{moment(blog?.createdAt).format('DD-MM-YYYY')}</td>
-                                                        <td className="text-center">
-                                                            <Button className="btn btn-success btn-sm mr-2 btn-round" onClick={() => {
-                                                                setViewBlog(!viewBlog)
-                                                                localStorage.setItem("blogId", blog?._id)
-                                                            }}>View</Button>
-                                                            <Button className="btn btn-warning btn-sm mr-2 btn-round"
-                                                            onClick={async() => {
-                                                                setEdit(!edit)
-                                                                // localStorage.setItem("blogId", blog?._id)
-                                                                setBlogId(blog?._id)
-                                                                // console.log(blogId);
-                                                                getBlogForEdit(blog?._id)
-                                                            }
-                                                            }
-                                                             >Edit</Button>
-                                                            <Button className="btn btn-danger btn-sm btn-round" onClick={() => {
-                                                                toggle()
-                                                                setBlogId(blog?._id)
-                                                            }}>Delete</Button>
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </Table>}
+                                        // <Table responsiveTag={true} hover onScroll={(e) => console.log(e)} style={{ overflowX: 'scroll' }}>
+                                        //     <thead className="text-primary">
+                                        //         <tr>
+                                        //             <th>#</th>
+                                        //             <th>Blog</th>
+                                        //             <th className="text-center">Date</th>
+                                        //             <th className="text-center">Actions</th>
+                                        //         </tr>
+                                        //     </thead>
+                                        //     <tbody>
+                                        //         {blogs?.map((blog, index) => (
+                                        //             <tr key={index}>
+                                        //                 <td>{index + 1}</td>
+                                        //                 <td>{blog?.title}</td>
+                                        //                 <td className="text-center">{moment(blog?.createdAt).format('DD-MM-YYYY')}</td>
+                                        //                 <td className="text-center">
+                                        //                     <Button className="btn btn-success btn-sm mr-2 btn-round mt-1" onClick={() => {
+                                        //                         setViewBlog(!viewBlog)
+                                        //                         localStorage.setItem("blogId", blog?._id)
+                                        //                     }}>View</Button>
+                                        //                     <Button className="btn btn-warning btn-sm mr-2 btn-round mt-1"
+                                        //                     onClick={async() => {
+                                        //                         setEdit(!edit)
+                                        //                         // localStorage.setItem("blogId", blog?._id)
+                                        //                         setBlogId(blog?._id)
+                                        //                         // console.log(blogId);
+                                        //                         getBlogForEdit(blog?._id)
+                                        //                     }
+                                        //                     }
+                                        //                      >Edit</Button>
+                                        //                     <Button className="btn btn-danger btn-sm btn-round mt-1" onClick={() => {
+                                        //                         toggle()
+                                        //                         setBlogId(blog?._id)
+                                        //                     }}>Delete</Button>
+                                        //                 </td>
+                                        //             </tr>
+                                        //         ))}
+                                        //     </tbody>
+                                        // </Table>
+                                        <>
+                                        
+                                        <InputText
+                                        className="p-mb-2 p-d-block p-mt-2"
+                                        placeholder="Search..."
+                                        value={filters['global'] ? filters['global'].value : ''}
+                                        type='search'
+                                        onInput={
+                                            (e) => {
+                                                setFilters({
+                                                    global: {
+                                                        value: e.target.value,
+                                                        matchMode: FilterMatchMode.CONTAINS
+                                                    }
+                                                })
+                                            }
+                                        }  
+                                        />
+                                        
+                                        <DataTable value={blogs} filters={filters} paginator rows={5}>
+                                            <Column field="S.No" header="S.No" body={(e) => blogs.indexOf(e) + 1} />
+                                            <Column field="title" header="Title" sortable/>
+                                            <Column field="createdAt" header="Date" body={(e) => moment(e.createdAt).format('DD-MM-YYYY')} sortable/>
+                                            <Column header="Actions" body={(e) => (
+                                                <>
+                                                    <Button className="btn btn-success btn-sm mr-2 btn-round mt-1" onClick={() => {
+                                                        setViewBlog(!viewBlog)
+                                                        localStorage.setItem("blogId", e._id)
+                                                    }}>View</Button>
+                                                    <Button className="btn btn-warning btn-sm mr-2 btn-round mt-1"
+                                                        onClick={async () => {
+                                                            setEdit(!edit)
+                                                            // localStorage.setItem("blogId", blog?._id)
+                                                            setBlogId(e._id)
+                                                            // console.log(blogId);
+                                                            getBlogForEdit(e._id)
+                                                        }
+                                                        }
+                                                    >Edit</Button>
+                                                    <Button className="btn btn-danger btn-sm btn-round mt-1" onClick={() => {
+                                                        toggle()
+                                                        setBlogId(e._id)
+                                                    }}>Delete</Button>
+                                                </>
+                                            )}/>
+                                        </DataTable>
+                                        </>
+                                        }
                                 </CardBody>
                             </Card>
                         )
