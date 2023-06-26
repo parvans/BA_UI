@@ -16,6 +16,7 @@ import "primereact/resources/themes/saga-blue/theme.css"
 import "primereact/resources/primereact.css"
 import { InputText } from 'primereact/inputtext'
 import nodata from "assets/img/nodata.png";
+import { TabView, TabPanel } from 'primereact/tabview';
 import 'primeicons/primeicons.css';
         
 export default function MyBlogs() {
@@ -273,10 +274,14 @@ export default function MyBlogs() {
                        
                          : openAdd|| edit ? (
 
-                            // Add Blog
+                            // Add Blog---------------------------------------------------------------------------------------------------------------------------------------------
                             <Card style={{ maxWidth: "100%", minWidth: "100%", marginTop: '30px', borderColor: 'transparent' }} >
                                 <CardBody>
-                                    <CardHeader style={{ display: 'flex', flexDirection: 'row', overflow: 'auto', alignItems: 'center' }}>
+                                    {openAdd?
+                                    (
+                                        <TabView>
+                                        <TabPanel header="Create">
+                                        <CardHeader style={{ display: 'flex', flexDirection: 'row', overflow: 'auto', alignItems: 'center' }}>
                                         <div style={{ display: 'flex', flexDirection: 'row', overflow: 'auto', alignItems: 'center' }}>
                                             <i className="nc-icon nc-minimal-left" style={{
                                                 cursor: 'pointer',
@@ -286,19 +291,14 @@ export default function MyBlogs() {
                                                 marginLeft: 'auto',
                                                 marginRight: '0px',
                                                 padding: '10px',
-                                                borderRadius: '50%',
-                                                backgroundColor: '#e9ecef',
                                                 marginBottom: '7px'
                                             }}
                                                 onClick={theLeave} />
                                         </div>
                                         <div style={{ display: 'flex', flexDirection: 'row', overflow: 'auto', alignItems: 'center', marginTop: '10px', marginLeft: '6px' }}>
-                                            <h5 className="title">
-                                                {edit? "Edit Blog" : "Create Blog"}
-                                                </h5>
+                                            <h5 className="title">Create Blog</h5>
                                         </div>
                                     </CardHeader>
-
                                     <Form>
                                         <div className="form-group">
                                             <label htmlFor="exampleFormControlInput1">Title</label>
@@ -333,8 +333,75 @@ export default function MyBlogs() {
                                             {loading ? <Spinner color="light" /> : edit ? 'Edit Blog' : 'Post Blog'}
                                             </Button>
                                     </Form>
+                                        </TabPanel>
+                                        <TabPanel header="Drafts">
+                                            <p>Content for Drafts</p>
+                                        </TabPanel>
+                                    </TabView>
+                                    ):(
+                                        <>
+                                    <CardHeader style={{ display: 'flex', flexDirection: 'row', overflow: 'auto', alignItems: 'center' }}>
+                                        <div style={{ display: 'flex', flexDirection: 'row', overflow: 'auto', alignItems: 'center' }}>
+                                            <i className="nc-icon nc-minimal-left" style={{
+                                                cursor: 'pointer',
+                                                fontSize: '20px',
+                                                fontWeight: 'bold',
+                                                alignItems: 'center',
+                                                marginLeft: 'auto',
+                                                marginRight: '0px',
+                                                padding: '10px',
+                                                borderRadius: '50%',
+                                                backgroundColor: '#e9ecef',
+                                                marginBottom: '7px'
+                                            }}
+                                                onClick={theLeave} />
+                                        </div>
+                                        <div style={{ display: 'flex', flexDirection: 'row', overflow: 'auto', alignItems: 'center', marginTop: '10px', marginLeft: '6px' }}>
+                                            <h5 className="title">
+                                                {edit? "Edit Blog" : "Create Blog"}
+                                                </h5>
+                                        </div>
+                                    </CardHeader>
+
+                                    <Form>
+                                        <div className="form-group">
+                                            <label htmlFor="exampleFormControlInput1">Title</label>
+                                            <input  type="text" className="form-control" value={title} onChange={(e) => setTitle(e.target.value)} id="exampleFormControlInput1" placeholder="Title" />
+                                            {titleError && <p style={{ color: 'red' }}>{titleError}</p>}
+                                        </div>
+                                        <div className="form-group">
+                                            <label htmlFor="exampleFormControlTextarea1">Content</label>
+
+                                            {/* Jodit Editor */}
+                                            <JoditEditor
+                                                ref={editorRef}
+                                                value={content}
+                                                tabIndex={1} // tabIndex of textarea
+                                                onBlur={newContent => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
+                                                onChange={(newContent) => setContent(newContent)}
+                                            />
+                                            {contentError && <p style={{ color: 'red' }}>{contentError}</p>}
+                                        </div>
+                                        {!edit&&(<><div className="form-group">
+                                            <label htmlFor="exampleFormControlFile1">Image</label>
+                                            <input type="file" className="form-control-file" id="exampleFormControlFile1" onChange={handleFileInput} value={image} />
+                                            {imageError && <p style={{ color: 'red' }}>{imageError}</p>}
+                                        </div>
+                                        {preview && (<div className="form-group">
+                                            <img src={preview} alt="blog" style={{ width: '200px', height: '200px' }} />
+                                        </div>)}
+                                        </>
+                                        )}
+                                        <Button className="btn btn-primary btn-md btn-round" onClick={edit? editBlog:addBlog}>
+                                            {/* {edit ? 'Edit Blog' : 'Post Blog'} */}
+                                            {loading ? <Spinner color="light" /> : edit ? 'Edit Blog' : 'Post Blog'}
+                                            </Button>
+                                    </Form>
+                                        </>
+                                    )}
                                 </CardBody>
                             </Card>
+                            // -------------------------------------------------------------------------------------------------------------------------------------------------------------
                         ) : (
                             // Table of Blogs 
 
@@ -342,7 +409,8 @@ export default function MyBlogs() {
                                 <CardBody>
                                     <CardHeader className="d-flex justify-content-between">
                                         <h5 className="title">My Blogs</h5>
-                                        <Button className="btn btn-primary btn-md btn-round" onClick={() => setOpenAdd(!openAdd)}>Add Blog</Button>
+                                        <Button className="btn btn-primary btn-md btn-round mt-1"  onClick={() => setOpenAdd(!openAdd)}><i className="nc-icon nc-simple-add"    style={{ fontSize: '1.2rem'}}></i></Button>
+                                
                                     </CardHeader>
                                     {blogs==null ? (
                                         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
@@ -360,7 +428,7 @@ export default function MyBlogs() {
                                                     <Button className="btn btn-success btn-sm mr-2 btn-round mt-1" onClick={() => {
                                                         setViewBlog(!viewBlog)
                                                         localStorage.setItem("blogId", e._id)
-                                                    }}>View</Button>
+                                                    }}><i className="pi pi-eye"  style={{ fontSize: '1.2rem'}}/></Button>
                                                     <Button className="btn btn-warning btn-sm mr-2 btn-round mt-1"
                                                         onClick={async () => {
                                                             setEdit(!edit)
@@ -368,11 +436,11 @@ export default function MyBlogs() {
                                                             getBlogForEdit(e._id)
                                                         }
                                                         }
-                                                    >Edit</Button>
+                                                    ><i className="pi pi-pencil" style={{ fontSize: '1.2rem'}}/></Button>
                                                     <Button className="btn btn-danger btn-sm btn-round mt-1" onClick={() => {
                                                         toggle()
                                                         setBlogId(e._id)
-                                                    }}>Delete</Button>
+                                                    }}><i className="pi pi-trash" style={{ fontSize: '1.2rem'}}/></Button>
                                                     {/* <i className="pi pi-eye"  style={{ fontSize: '1.4rem', cursor: 'pointer',color: 'skyblue' }}
                                                     
                                                     onClick={() => {
