@@ -1,14 +1,14 @@
 import BlogCard from "components/Cards/BlogCard";
 import React, { useEffect, useState } from "react";
 // react plugin used to create charts
-// import { Line, Pie } from "react-chartjs-2";
+import { Line, Pie } from "react-chartjs-2";
 // reactstrap components
 import {
-  // Card,
-  // CardHeader,
-  // CardBody,
-  // CardFooter,
-  // CardTitle,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  CardTitle,
   Row,
   Col,
 } from "reactstrap";
@@ -16,11 +16,11 @@ import { getAllBlogs } from "utilities/apiService";
 import Blog from "./ezhuth/Blog/Blog";
 import nodata from "assets/img/nodata.png";
 // core components
-// import {
-//   dashboard24HoursPerformanceChart,
-//   dashboardEmailStatisticsChart,
-//   dashboardNASDAQChart
-// } from "variables/charts.js";
+import {
+  dashboard24HoursPerformanceChart,
+  dashboardEmailStatisticsChart,
+  dashboardNASDAQChart
+} from "variables/charts.js";
 
 
 function Dashboard() {
@@ -229,7 +229,7 @@ function Dashboard() {
         </Row>
       </div> */}
 
-      <div className="content">
+       <div className="content">
         {!blog?<Row className="justify-content-center">
 
           { blogs.length > 0 ?
@@ -253,7 +253,6 @@ function Dashboard() {
 
             })
             :( <div className="text-center">
-              {/* <h3>No Blogs Found</h3> */}
               <img src={nodata} alt="no blogs found" style={{width:"100%"}}/>
               </div>)
           }
@@ -262,7 +261,7 @@ function Dashboard() {
           blog={blog}
           setBlog={setBlog}
           />}
-      </div>
+      </div> 
 
     </>
   );
