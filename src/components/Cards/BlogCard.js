@@ -38,7 +38,7 @@ export default function BlogCard(props) {
                 </div>
                 <div className="colored-shadow">
 
-                {image &&<Image cloudName="dgupyenrw" publicId={image} style={{ height: "500px", width: "100%" }} />}
+                {image &&<Image cloudName="dgupyenrw" publicId={image} style={{ height: "300px", width: "100%" }} />}
                 </div>
                 <div className="card-body" >
                     <h4 className="card-title">
