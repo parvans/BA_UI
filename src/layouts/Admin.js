@@ -27,6 +27,7 @@ import Sidebar from "components/Sidebar/Sidebar.js";
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 
 import routes from "routes.js";
+import NotFound from "views/ezhuth/NotFound";
 
 var ps;
 
@@ -69,6 +70,8 @@ function Dashboard(props) {
         <DemoNavbar {...props} />
         <Switch>
           {routes.map((prop, key) => {
+            // console.log("routes: ", prop)
+            
             return (
               <Route
                 path={prop.layout + prop.path}
@@ -77,6 +80,8 @@ function Dashboard(props) {
               />
             );
           })}
+        <Route path="/ezhuth" component={NotFound} />
+
         </Switch>
         <Footer fluid />
       </div>

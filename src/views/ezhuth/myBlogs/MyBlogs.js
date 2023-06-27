@@ -18,10 +18,12 @@ import { InputText } from 'primereact/inputtext'
 import nodata from "assets/img/nodata.png";
 import { TabView, TabPanel } from 'primereact/tabview';
 import 'primeicons/primeicons.css';
+import { getAllDraftBlogs } from 'utilities/apiService'
         
 export default function MyBlogs() {
     const editorRef = useRef(null)
     const [blogs, setBlogs] = useState()
+    const [drafts, setDrafts] = useState()
     const [openModal, setOpenModal] = useState(false)
     const [blogId, setBlogId] = useState()
     const [openAdd, setOpenAdd] = useState(false)
@@ -53,6 +55,14 @@ export default function MyBlogs() {
             // console.log(response?.data?.data);
             setBlogs(response?.data?.data)
             // setLoading(false)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const getDrafts = async () => {
+        try {
+            const response = await getAllDraftBlogs()
+            console.log(response?.data?.data);
         } catch (error) {
             console.log(error);
         }
@@ -238,6 +248,7 @@ export default function MyBlogs() {
     const header = renderHeader();
     useEffect(() => {
         getBlogs()
+        getDrafts()
     }, [blogs, openModal, openAdd, leave, viewBlog,edit])
     return (
         <div className="content">
