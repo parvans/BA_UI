@@ -22,6 +22,7 @@ import { getAllUserTrashBlogs } from 'utilities/apiService'
 import { moveToTrash } from 'utilities/apiService'
 import tc from 'thousands-counter';
 import { getUserDrafts } from 'utilities/apiService'
+import { moveToDraft } from 'utilities/apiService'
 
 export default function MyBlogs() {
     const editorRef = useRef(null)
@@ -30,6 +31,7 @@ export default function MyBlogs() {
     const [trashs,setTrashs]=useState([])
     const [openModal, setOpenModal] = useState(false)
     const [openDelete, setOpenDelete] = useState(false)
+    const [openDraft, setOpenDraft] = useState(false)
     const [blogId, setBlogId] = useState()
     const [openAdd, setOpenAdd] = useState(false)
     const [title, setTitle] = useState('')
@@ -101,6 +103,9 @@ export default function MyBlogs() {
     // This is to maintain the delete warning modal
     const toggle = () => {
         setOpenModal(!openModal)
+    }
+    const toggleDraft = () => {
+        setOpenDraft(!openDraft)
     }
     const toggleDelete = () => {
         setOpenDelete(!openDelete)
@@ -267,6 +272,20 @@ export default function MyBlogs() {
             console.log(error);
         }
     }
+
+    const restoreToDraft = async (e) => {
+        try {
+            const res=await moveToDraft(blogId)
+            if(!res?.ok){
+                toast.error(res?.data?.message)
+            }else{
+                toast.success(res?.data?.message)
+                setOpenDraft(!openDraft)
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
     //--------------------------------------------------------------------------------
 
 
@@ -353,6 +372,16 @@ export default function MyBlogs() {
                 <ModalFooter>
                     <Button className="btn-round" color="danger" onClick={deleteBlog}>Delete</Button>{' '}
                     <Button className="btn-round" color="secondary" onClick={toggleDelete}>Cancel</Button>
+                </ModalFooter>
+            </Modal>
+            <Modal isOpen={openDraft} toggle={toggleDraft} className="modal-dialog-centered">
+                <ModalHeader toggle={toggle}>Move to Draft</ModalHeader>
+                <ModalBody>
+                    Are you sure you want to move this to Draft ?
+                </ModalBody>
+                <ModalFooter>
+                    <Button className="btn-round" color="danger" onClick={restoreToDraft}>Move to Draft</Button>{' '}
+                    <Button className="btn-round" color="secondary" onClick={toggleDraft}>Cancel</Button>
                 </ModalFooter>
             </Modal>
 
@@ -537,7 +566,7 @@ export default function MyBlogs() {
                                                 
                                                 {/* Restore the blog to draft */}
                                                 <Button className="btn btn-success btn-sm mr-2 btn-round mt-1" onClick={() => {
-                                                    // toggleRestore()
+                                                    toggleDraft()
                                                     setBlogId(e._id)
                                                 }}><i className="pi pi-refresh"  style={{ fontSize: '1.2rem'}}/></Button>
 
