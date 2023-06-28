@@ -36,8 +36,8 @@ var routes = [
     layout: "/ezhuth"
   },
   {
-    path: "/myblogs",
-    name: "My Blogs",
+    path: "/posts",
+    name: "Posts",
     icon: "nc-icon nc-bullet-list-67",
     component: MyBlogs,
     layout: "/ezhuth"

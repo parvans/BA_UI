@@ -3,7 +3,7 @@ import React from 'react'
 import {Image} from 'cloudinary-react'
 
 export default function BlogCard(props) {
-    const { title, image, author, date ,id,blog,setBlog,likes} = props
+    const { title, image, author, date ,id,setBlog} = props
     return (
         <div className="card card-blog">
 
@@ -38,7 +38,7 @@ export default function BlogCard(props) {
                 </div>
                 <div className="colored-shadow">
 
-                {image &&<Image cloudName="dgupyenrw" publicId={image} style={{ height: "500px", width: "100%" }} />}
+                {image &&<Image cloudName="dgupyenrw" publicId={image} style={{ height: "300px", width: "100%" }} />}
                 </div>
                 <div className="card-body" >
                     <h4 className="card-title">
@@ -56,17 +56,6 @@ export default function BlogCard(props) {
                 </div>
                 
             </div>
-
-            <div className="card-footer justify-content-center">
-                <div className="stats ml-auto">
-                    <h6 className="text-muted" style={{ fontSize: "0.8rem" }}>
-                    <span className="licon icon-like"></span>{likes}
-                    {/* <span class="licon icon-com ml-3"></span><a href="#">12</a> */}
-                    <span className="licon icon-dat ml-3"></span>{moment.utc(date).utcOffset("+05:30").format("DD MMM YYYY")}
-                    </h6>
-                </div>
-            </div>
-
 
 
 

@@ -41,10 +41,7 @@ export default function Blog(props) {
                                 marginLeft: 'auto',
                                 marginRight: '0px',
                                 padding: '10px',
-                                borderRadius: '50%',
-                                backgroundColor: '#e9ecef'
                                 
-
                             }}
                             onClick={() => {
                                 setBlog(false)

@@ -2,16 +2,28 @@ import JoditEditor from 'jodit-pro-react'
 import moment from 'moment'
 import React, { useEffect, useRef, useState } from 'react'
 import { Toaster, toast } from 'react-hot-toast'
-import { Card, CardBody, CardHeader, Col, Row, Table, Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, Spinner } from 'reactstrap'
+import { Card, CardBody, CardHeader, Col, Row, Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, Spinner } from 'reactstrap'
 import { addUserBlog } from 'utilities/apiService'
 import { deleteMyBlogs } from 'utilities/apiService'
 import { getMyBlogs } from 'utilities/apiService'
 import Blog from '../Blog/Blog'
 import { getABlog } from 'utilities/apiService'
 import { editUserBlog } from 'utilities/apiService'
+import {DataTable} from 'primereact/datatable'
+import {Column} from 'primereact/column'
+import {FilterMatchMode} from 'primereact/api'
+import "primereact/resources/themes/saga-blue/theme.css"
+import "primereact/resources/primereact.css"
+import { InputText } from 'primereact/inputtext'
+import nodata from "assets/img/nodata.png";
+import { TabView, TabPanel } from 'primereact/tabview';
+import 'primeicons/primeicons.css';
+import { getAllDraftBlogs } from 'utilities/apiService'
+import { Skeleton } from 'primereact/skeleton';
 export default function MyBlogs() {
     const editorRef = useRef(null)
     const [blogs, setBlogs] = useState()
+    const [drafts, setDrafts] = useState()
     const [openModal, setOpenModal] = useState(false)
     const [blogId, setBlogId] = useState()
     const [openAdd, setOpenAdd] = useState(false)
@@ -29,12 +41,28 @@ export default function MyBlogs() {
     const [contentError, setContentError] = useState('')
     const [imageError, setImageError] = useState('')
 
+    //Filter
+    const [filters, setFilters] = useState({
+        global: {
+            value: null,
+            matchMode: FilterMatchMode.CONTAINS
+        }
+    })
+
     const getBlogs = async () => {
         try {
             const response = await getMyBlogs()
             // console.log(response?.data?.data);
             setBlogs(response?.data?.data)
             // setLoading(false)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const getDrafts = async () => {
+        try {
+            const response = await getAllDraftBlogs()
+            console.log(response?.data?.data);
         } catch (error) {
             console.log(error);
         }
@@ -199,8 +227,31 @@ export default function MyBlogs() {
             console.log(error);
         }        
     }
+    const renderHeader = () => {
+        return (
+            <div className="flex justify-content-end">
+                <span className="p-input-icon-left">
+                <i className="nc-icon nc-zoom-split" />
+                    <InputText value={filters['global'] ? filters['global'].value : ''} onChange={(e)=>{
+                        setFilters({
+                            global: {
+                                value: e.target.value,
+                                matchMode: FilterMatchMode.CONTAINS
+                            }
+                        })
+                    }} placeholder="Keyword Search" />
+                </span>
+            </div>
+        );
+    };
+ const bodyTemplate = () => {
+        return <Skeleton></Skeleton>
+    }
+
+    const header = renderHeader();
     useEffect(() => {
         getBlogs()
+        getDrafts()
     }, [blogs, openModal, openAdd, leave, viewBlog,edit])
     return (
         <div className="content">
@@ -235,11 +286,14 @@ export default function MyBlogs() {
                     
                     <Blog blog={viewBlog} setBlog={setViewBlog} />
                        
-                         : openAdd|| edit ? (
+                         : 
+                             <Card style={{ maxWidth: "100%", minWidth: "100%", marginTop: '30px', borderColor: 'transparent' }} >
 
-                            // Add Blog
-                            <Card style={{ maxWidth: "100%", minWidth: "100%", marginTop: '30px', borderColor: 'transparent' }} >
+                                  {/* Add Blog-*/}
+                                  {openAdd|| edit ? (
                                 <CardBody>
+                                    
+                                        <>
                                     <CardHeader style={{ display: 'flex', flexDirection: 'row', overflow: 'auto', alignItems: 'center' }}>
                                         <div style={{ display: 'flex', flexDirection: 'row', overflow: 'auto', alignItems: 'center' }}>
                                             <i className="nc-icon nc-minimal-left" style={{
@@ -266,7 +320,7 @@ export default function MyBlogs() {
                                     <Form>
                                         <div className="form-group">
                                             <label htmlFor="exampleFormControlInput1">Title</label>
-                                            <input type="text" className="form-control" value={title} onChange={(e) => setTitle(e.target.value)} id="exampleFormControlInput1" placeholder="Title" />
+                                            <input  type="text" className="form-control" value={title} onChange={(e) => setTitle(e.target.value)} id="exampleFormControlInput1" placeholder="Title" />
                                             {titleError && <p style={{ color: 'red' }}>{titleError}</p>}
                                         </div>
                                         <div className="form-group">
@@ -297,60 +351,72 @@ export default function MyBlogs() {
                                             {loading ? <Spinner color="light" /> : edit ? 'Edit Blog' : 'Post Blog'}
                                             </Button>
                                     </Form>
+                                        </>
+                                    
                                 </CardBody>
-                            </Card>
-                        ) : (
-                            // Table of Blogs 
-
-                            <Card style={{ maxWidth: "100%", minWidth: "100%", marginTop: '30px', borderColor: 'transparent' }} >
+                            ) : (
+                                // Table of Blogs 
+                                
                                 <CardBody>
-                                    <CardHeader className="d-flex justify-content-between">
-                                        <h5 className="title">My Blogs</h5>
-                                        <Button className="btn btn-primary btn-md btn-round" onClick={() => setOpenAdd(!openAdd)}>Add Blog</Button>
-                                    </CardHeader>
-                                    {blogs?.length === 0 ? <h5 className="text-center">No Blogs Found</h5> :
-                                        <Table responsiveTag={true} hover onScroll={(e) => console.log(e)} style={{ overflowX: 'scroll' }}>
-                                            <thead className="text-primary">
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Blog</th>
-                                                    <th className="text-center">Date</th>
-                                                    <th className="text-center">Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {blogs?.map((blog, index) => (
-                                                    <tr key={index}>
-                                                        <td>{index + 1}</td>
-                                                        <td>{blog?.title}</td>
-                                                        <td className="text-center">{moment(blog?.createdAt).format('DD-MM-YYYY')}</td>
-                                                        <td className="text-center">
-                                                            <Button className="btn btn-success btn-sm mr-2 btn-round" onClick={() => {
-                                                                setViewBlog(!viewBlog)
-                                                                localStorage.setItem("blogId", blog?._id)
-                                                            }}>View</Button>
-                                                            <Button className="btn btn-warning btn-sm mr-2 btn-round"
-                                                            onClick={async() => {
-                                                                setEdit(!edit)
-                                                                // localStorage.setItem("blogId", blog?._id)
-                                                                setBlogId(blog?._id)
-                                                                // console.log(blogId);
-                                                                getBlogForEdit(blog?._id)
-                                                            }
-                                                            }
-                                                             >Edit</Button>
-                                                            <Button className="btn btn-danger btn-sm btn-round" onClick={() => {
-                                                                toggle()
-                                                                setBlogId(blog?._id)
-                                                            }}>Delete</Button>
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </Table>}
-                                </CardBody>
-                            </Card>
-                        )
+                                <CardHeader className="d-flex justify-content-between">
+                                    <h5 className="title">Posts</h5>
+                                    <Button className="btn btn-primary btn-md btn-round mt-1"  onClick={() => setOpenAdd(!openAdd)}>Add Blog</Button>
+                            
+                                </CardHeader>
+                                <TabView>
+                                    <TabPanel header="Posts" leftIcon="pi pi-fw pi-book">
+                                {blogs==null ? (
+                                   <DataTable value={Array.from({ length: 5 }, (v, i) => i)} showGridlines  header={header} filters={filters} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} paginatorLeft filterIcon>
+                                        <Column field="S.No" header="S.No" body={bodyTemplate} />
+                                        <Column field="title" header="Title" sortable body={bodyTemplate} />
+                                        <Column field="createdAt" header="Date" body={bodyTemplate} sortable/>
+                                        <Column header="Actions" body={bodyTemplate}/>
+                                    </DataTable>
+                                //  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                                //         <img src={nodata} alt="empty" style={{ width: '500px', height: '500px' }} />
+                                        
+                                //     </div>
+                                ) :
+                                  
+                                    <>
+                                    <DataTable value={blogs} showGridlines  header={header} filters={filters} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} paginatorLeft filterIcon>
+                                        <Column field="S.No" header="S.No" body={(e) => blogs.indexOf(e) + 1} />
+                                        <Column field="title" header="Title" sortable />
+                                        <Column field="createdAt" header="Date" body={(e) => moment(e.createdAt).format('DD-MM-YYYY')} sortable/>
+                                        <Column header="Actions" body={(e) => (
+                                            <>
+                                                <Button className="btn btn-success btn-sm mr-2 btn-round mt-1" onClick={() => {
+                                                    setViewBlog(!viewBlog)
+                                                    localStorage.setItem("blogId", e._id)
+                                                }}><i className="pi pi-eye"  style={{ fontSize: '1.2rem'}}/></Button>
+                                                <Button className="btn btn-warning btn-sm mr-2 btn-round mt-1"
+                                                    onClick={async () => {
+                                                        setEdit(!edit)
+                                                        setBlogId(e._id)
+                                                        getBlogForEdit(e._id)
+                                                    }
+                                                    }
+                                                ><i className="pi pi-pencil" style={{ fontSize: '1.2rem'}}/></Button>
+                                                <Button className="btn btn-danger btn-sm btn-round mt-1" onClick={() => {
+                                                    toggle()
+                                                    setBlogId(e._id)
+                                                }}><i className="pi pi-trash" style={{ fontSize: '1.2rem'}}/></Button>
+                                            </>
+                                        )}/>
+                                    </DataTable>
+                                    </>
+                                    }
+                                    </TabPanel>
+                                    <TabPanel header="Drafts" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }} leftIcon="pi pi-fw pi-paperclip">
+                                    <h5 style={{ marginLeft: '20px' }}>No Drafts</h5>
+                                    </TabPanel>
+                                    <TabPanel header="Trash" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }} leftIcon="pi pi-fw pi-trash">
+                                    <h5 style={{ marginLeft: '20px' }}>No Trash</h5>
+                                    </TabPanel>
+                                </TabView>
+                            </CardBody>
+                            )}
+                            </Card>        
                     }
                 </Col>
             </Row>

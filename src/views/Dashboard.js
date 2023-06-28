@@ -1,26 +1,27 @@
 import BlogCard from "components/Cards/BlogCard";
 import React, { useEffect, useState } from "react";
 // react plugin used to create charts
-// import { Line, Pie } from "react-chartjs-2";
+import { Line, Pie } from "react-chartjs-2";
 // reactstrap components
 import {
-  // Card,
-  // CardHeader,
-  // CardBody,
-  // CardFooter,
-  // CardTitle,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  CardTitle,
   Row,
   Col,
 } from "reactstrap";
 import { getAllBlogs } from "utilities/apiService";
 import Blog from "./ezhuth/Blog/Blog";
-import Blogg from "components/Cards/New/Blogg";
+import nodata from "assets/img/nodata.png";
 // core components
-// import {
-//   dashboard24HoursPerformanceChart,
-//   dashboardEmailStatisticsChart,
-//   dashboardNASDAQChart
-// } from "variables/charts.js";
+import {
+  dashboard24HoursPerformanceChart,
+  dashboardEmailStatisticsChart,
+  dashboardNASDAQChart
+} from "variables/charts.js";
+import CardSkeleton from "components/Skeletons/CardSkeleton";
 
 
 function Dashboard() {
@@ -36,6 +37,8 @@ function Dashboard() {
     }
 
   }
+
+  const randoms=Array.from({ length: 5 }, (v, i) => i)
   useEffect(() => {
     allBlogs();
   }, []);
@@ -229,8 +232,7 @@ function Dashboard() {
         </Row>
       </div> */}
 
-      <div className="content">
-        {/* <Blogg /> */}
+       <div className="content">
         {!blog?<Row className="justify-content-center">
 
           { blogs.length > 0 ?
@@ -253,14 +255,22 @@ function Dashboard() {
               )
 
             })
-            :<h1>No Blogs</h1>
+            :( 
+              randoms.map((blog, index) => {
+                return (
+                  <Col md="8" key={index}>
+                    <CardSkeleton/>
+                  </Col>
+              )
+            })
+            )
           }
           </Row>:
           <Blog
           blog={blog}
           setBlog={setBlog}
           />}
-      </div>
+      </div> 
 
     </>
   );
