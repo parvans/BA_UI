@@ -281,8 +281,8 @@ export default function Login() {
                                                     <Input disabled={loading} placeholder="Password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
                                                     {confirmPasswordError && <p className='text-danger'>{confirmPasswordError}</p>}
                                                     <br />
-                                                    <Button disabled={loading} color='primary' className='mt-3' block onClick={handleResetPassword}>
-                                                    {loading ? <Spinner color='light' /> : 'Reset Password'}
+                                                    <Button disabled={loading} color='primary' className='mt-3 btn-round' block onClick={handleResetPassword}>
+                                                    {loading ? <Spinner style={{width:20,height:20}} color='light' /> : 'Reset Password'}
                                                         </Button>
                                                 </FormGroup>
                                             </>
@@ -295,8 +295,8 @@ export default function Login() {
                                                     <Input disabled={loading} placeholder="OTP" type="text" value={otp} onChange={(e) => setOtp(e.target.value)} />
                                                     {otpError && <p className='text-danger'>{otpError}</p>}
                                                     <br />
-                                                    <Button disabled={loading} color='primary' className='mt-3' block onClick={verifyOtp}>
-                                                    {loading ? <Spinner color='light' /> : 'Verify OTP'}
+                                                    <Button disabled={loading} color='primary' className='mt-3 btn-round' block onClick={verifyOtp}>
+                                                    {loading ? <Spinner style={{width:20,height:20}} color='light' /> : 'Verify OTP'}
                                                     </Button>
                                                 </FormGroup>
                                             </>
@@ -315,8 +315,8 @@ export default function Login() {
                                                         Back to Login
                                                     </span>
                                                     <br />
-                                                    <Button disabled={loading} color='primary' className='mt-3' block onClick={verifyEmail}>
-                                                    {loading ? <Spinner color='light' /> : 'Verify Email'}
+                                                    <Button disabled={loading} color='primary' className='mt-3 btn-round' block onClick={verifyEmail}>
+                                                    {loading ? <Spinner style={{width:20,height:20}} color='light' /> : 'Verify Email'}
                                                     </Button>
                                                     {/* <p className='text-center mt-3'>Don't have an account? <a href='#' onClick={()=>setIsRegister(true)}>Sign Up</a></p> */}
                                                 </FormGroup>
@@ -353,8 +353,8 @@ export default function Login() {
                                                     <Label for='ConfirmPassword'>Confirm Password</Label>
                                                     <Input disabled={loading} placeholder="Confirm Password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
                                                     {confirmPasswordError && <p className='text-danger'>{confirmPasswordError}</p>}
-                                                    <Button disabled={loading} color='primary' className='mt-3' block onClick={handleRegister}>
-                                                    {loading ? <Spinner color='light' /> : 'Register'}
+                                                    <Button disabled={loading} color='primary' className='mt-3 btn-round' block onClick={handleRegister}>
+                                                    {loading ? <Spinner style={{width:20,height:20}} color='light' /> : 'Register'}
                                                     </Button>
                                                     <p className='text-center mt-3'>Already have an account? <span style={{cursor:'pointer',color: "#51bcda"}} 
                                                     onClick={() => {
@@ -379,8 +379,8 @@ export default function Login() {
                                                     <span style={{cursor:'pointer',color: "#51bcda"}} onClick={() => setIsForgotPassword(true)}>
                                                         Forgot Password?</span>
                                                     <br />
-                                                    <Button disabled={loading} color='primary' className='mt-3' block onClick={handleLogin}>
-                                                        {loading ? <Spinner color='light' /> : 'Login'}
+                                                    <Button disabled={loading} color='primary' className='mt-3 btn-round' block onClick={handleLogin}>
+                                                        {loading ? <Spinner style={{width:20,height:20}} color='light' /> : 'Login'}
                                                         </Button>
                                                     <p className='text-center mt-3'>Don't have an account? <span style={{cursor:'pointer',color: "#51bcda"}} onClick={() => setIsRegister(true)}>Sign Up</span></p>
                                                 </FormGroup>
