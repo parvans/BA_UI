@@ -19,7 +19,7 @@ import nodata from "assets/img/nodata.png";
 import { TabView, TabPanel } from 'primereact/tabview';
 import 'primeicons/primeicons.css';
 import { getAllDraftBlogs } from 'utilities/apiService'
-        
+import { Skeleton } from 'primereact/skeleton';
 export default function MyBlogs() {
     const editorRef = useRef(null)
     const [blogs, setBlogs] = useState()
@@ -244,6 +244,9 @@ export default function MyBlogs() {
             </div>
         );
     };
+ const bodyTemplate = () => {
+        return <Skeleton></Skeleton>
+    }
 
     const header = renderHeader();
     useEffect(() => {
@@ -363,10 +366,16 @@ export default function MyBlogs() {
                                 <TabView>
                                     <TabPanel header="Posts" leftIcon="pi pi-fw pi-book">
                                 {blogs==null ? (
-                                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                                        <img src={nodata} alt="empty" style={{ width: '500px', height: '500px' }} />
+                                   <DataTable value={Array.from({ length: 5 }, (v, i) => i)} showGridlines  header={header} filters={filters} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} paginatorLeft filterIcon>
+                                        <Column field="S.No" header="S.No" body={bodyTemplate} />
+                                        <Column field="title" header="Title" sortable body={bodyTemplate} />
+                                        <Column field="createdAt" header="Date" body={bodyTemplate} sortable/>
+                                        <Column header="Actions" body={bodyTemplate}/>
+                                    </DataTable>
+                                //  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                                //         <img src={nodata} alt="empty" style={{ width: '500px', height: '500px' }} />
                                         
-                                    </div>
+                                //     </div>
                                 ) :
                                   
                                     <>
@@ -392,15 +401,6 @@ export default function MyBlogs() {
                                                     toggle()
                                                     setBlogId(e._id)
                                                 }}><i className="pi pi-trash" style={{ fontSize: '1.2rem'}}/></Button>
-                                                {/* <i className="pi pi-eye"  style={{ fontSize: '1.4rem', cursor: 'pointer',color: 'skyblue' }}
-                                                
-                                                onClick={() => {
-                                                    setViewBlog(!viewBlog)
-                                                    localStorage.setItem("blogId", e._id)
-                                                }}
-                                                />
-                                                <i className="pi pi-pencil ml-2" style={{ fontSize: '1.4rem', cursor: 'pointer',color: 'green' }}/>
-                                                <i className="pi pi-trash ml-2" style={{ fontSize: '1.4rem', cursor: 'pointer',color: 'red' }}/> */}
                                             </>
                                         )}/>
                                     </DataTable>

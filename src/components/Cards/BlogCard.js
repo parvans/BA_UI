@@ -3,7 +3,7 @@ import React from 'react'
 import {Image} from 'cloudinary-react'
 
 export default function BlogCard(props) {
-    const { title, image, author, date ,id,blog,setBlog,likes} = props
+    const { title, image, author, date ,id,setBlog} = props
     return (
         <div className="card card-blog">
 

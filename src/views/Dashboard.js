@@ -21,6 +21,7 @@ import {
   dashboardEmailStatisticsChart,
   dashboardNASDAQChart
 } from "variables/charts.js";
+import CardSkeleton from "components/Skeletons/CardSkeleton";
 
 
 function Dashboard() {
@@ -36,6 +37,8 @@ function Dashboard() {
     }
 
   }
+
+  const randoms=Array.from({ length: 5 }, (v, i) => i)
   useEffect(() => {
     allBlogs();
   }, []);
@@ -252,9 +255,15 @@ function Dashboard() {
               )
 
             })
-            :( <div className="text-center">
-              <img src={nodata} alt="no blogs found" style={{width:"100%"}}/>
-              </div>)
+            :( 
+              randoms.map((blog, index) => {
+                return (
+                  <Col md="8" key={index}>
+                    <CardSkeleton/>
+                  </Col>
+              )
+            })
+            )
           }
           </Row>:
           <Blog
