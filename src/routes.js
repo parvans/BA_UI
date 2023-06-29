@@ -56,13 +56,13 @@ var routes = [
     component: UserPage,
     layout: "/ezhuth"
   },
-  // {
-  //   path: "/chats",
-  //   name: "Chats",
-  //   icon: "nc-icon nc-chat-33",
-  //   component: UserPage,
-  //   layout: "/ezhuth"
-  // },
+  {
+    path: "/chats",
+    name: "Chats",
+    icon: "nc-icon nc-chat-33",
+    component: UserPage,
+    layout: "/ezhuth"
+  },
 
   // {
   //   path:"/login",
