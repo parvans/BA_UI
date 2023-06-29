@@ -170,10 +170,14 @@ function Header(props) {
                 </p>
               </DropdownToggle>
               <DropdownMenu right>
-                <DropdownItem tag="a" onClick={handleProfile}>
-                  Profile
+                <DropdownItem className="mt-2" tag="a" onClick={handleProfile}>
+                  <i className="nc-icon nc-single-02" style={{ fontSize: "1.1rem" }} /> Profile
                   </DropdownItem>
-                <DropdownItem tag="a" onClick={handleLogout}>Logout</DropdownItem>
+                <DropdownItem tag="a" onClick={handleLogout}>
+                  <i className="nc-icon nc-button-power mr-1" style={{ fontSize: "1.1rem" }} />
+                  
+                  Logout
+                  </DropdownItem>
                 {/* <DropdownItem tag="a" >
                   Profile</DropdownItem> */}
                 {/* <DropdownItem tag="a">Something else here</DropdownItem> */}

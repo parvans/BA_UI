@@ -2,7 +2,7 @@ import JoditEditor from 'jodit-pro-react'
 import moment from 'moment'
 import React, { useEffect, useRef, useState } from 'react'
 import { Toaster, toast } from 'react-hot-toast'
-import { Card, CardBody, CardHeader, Col, Row, Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, Spinner } from 'reactstrap'
+import { Card, CardBody, CardHeader, Col, Row, Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, Spinner, Input, Label } from 'reactstrap'
 import { addUserBlog } from 'utilities/apiService'
 import { deleteMyBlogs } from 'utilities/apiService'
 import { getMyBlogs } from 'utilities/apiService'
@@ -15,16 +15,23 @@ import {FilterMatchMode} from 'primereact/api'
 import "primereact/resources/themes/saga-blue/theme.css"
 import "primereact/resources/primereact.css"
 import { InputText } from 'primereact/inputtext'
-import nodata from "assets/img/nodata.png";
 import { TabView, TabPanel } from 'primereact/tabview';
 import 'primeicons/primeicons.css';
-import { getAllDraftBlogs } from 'utilities/apiService'
 import { Skeleton } from 'primereact/skeleton';
+import { getAllUserTrashBlogs } from 'utilities/apiService'
+import { moveToTrash } from 'utilities/apiService'
+import tc from 'thousands-counter';
+import { getUserDrafts } from 'utilities/apiService'
+import { moveToDraft } from 'utilities/apiService'
+
 export default function MyBlogs() {
     const editorRef = useRef(null)
-    const [blogs, setBlogs] = useState()
-    const [drafts, setDrafts] = useState()
+    const [blogs, setBlogs] = useState([])
+    const [drafts, setDrafts] = useState([])
+    const [trashs,setTrashs]=useState([])
     const [openModal, setOpenModal] = useState(false)
+    const [openDelete, setOpenDelete] = useState(false)
+    const [openDraft, setOpenDraft] = useState(false)
     const [blogId, setBlogId] = useState()
     const [openAdd, setOpenAdd] = useState(false)
     const [title, setTitle] = useState('')
@@ -34,6 +41,7 @@ export default function MyBlogs() {
     const [leave, setLeave] = useState(false)
     const [viewBlog, setViewBlog] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [draftLoading, setDraftLoading] = useState(false)
     //recognize edit or add
     const [edit, setEdit] = useState(false)
     //errors
@@ -48,7 +56,6 @@ export default function MyBlogs() {
             matchMode: FilterMatchMode.CONTAINS
         }
     })
-
     const getBlogs = async () => {
         try {
             const response = await getMyBlogs()
@@ -59,28 +66,34 @@ export default function MyBlogs() {
             console.log(error);
         }
     }
-    const getDrafts = async () => {
+
+    const getTrashBlogs=async()=>{
         try {
-            const response = await getAllDraftBlogs()
-            console.log(response?.data?.data);
+            const response=await getAllUserTrashBlogs()
+            setTrashs(response?.data?.data)
         } catch (error) {
             console.log(error);
         }
     }
 
+    const getDrafts = async () => {
+        try {
+           const res=await getUserDrafts() 
+              setDrafts(res?.data?.data)
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    
+
     // This is to get data for edit
     const getBlogForEdit=async(id)=>{
         try {
             const res=await getABlog(id);
-            // console.log(res?.data);
             if(res?.ok){
-                // setData(res?.data);
-                // setContent(res?.data?.blog?.description);
                 setTitle(res?.data?.blog?.title);
                 setContent(res?.data?.blog?.description);
-                // setPreview(res?.data?.blog?.image);
-
-                // console.log(res?.data?.blog?.title);
             }
         } catch (error) {
             console.log(error);
@@ -90,6 +103,12 @@ export default function MyBlogs() {
     // This is to maintain the delete warning modal
     const toggle = () => {
         setOpenModal(!openModal)
+    }
+    const toggleDraft = () => {
+        setOpenDraft(!openDraft)
+    }
+    const toggleDelete = () => {
+        setOpenDelete(!openDelete)
     }
 
     const toggleLeave = () => {
@@ -125,15 +144,29 @@ export default function MyBlogs() {
             setOpenAdd(!openAdd)
         }
     }
+//Move the blog to trash 
+    const trashTheBlog = async ()=>{
+        setOpenModal(!openModal)
+        try {
+            const res = await moveToTrash(blogId)
+            console.log(res);
+            if (!res?.ok) {
+                toast.error(res?.data?.message)
+            } else {
+                // console.log(res?.data);
+                toast.success(res?.data?.message)
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
     const deleteBlog = async () => {
         setOpenModal(!openModal)
         try {
-            console.log(blogId);
             const res = await deleteMyBlogs(blogId)
             console.log(res?.ok);
             if (!res?.ok) {
                 toast.error(res?.data?.message)
-                // getBlogs()
             } else {
                 toast.success(res?.data?.message)
             }
@@ -197,6 +230,62 @@ export default function MyBlogs() {
             console.log(error);
         }
     }
+    const saveToDraft = async (e) => {
+        e.preventDefault()
+        if (!title) {
+            setTitleError('Title is required')
+        } else {
+            setTitleError('')
+        }
+        if (!content) {
+            setContentError('Content is required')
+        } else {
+            setContentError('')
+        }
+        if (!preview) {
+            setImageError('Image is required')
+        } else {
+
+            setImageError('')
+            setDraftLoading(true)
+        }
+        
+        try {
+            const res = await addUserBlog({
+                title,
+                description: content,
+                data: preview,
+                isDraft:true
+            })
+            if (!res?.ok) {
+                toast.error(res?.data?.message)
+            } else {
+                setTimeout(() => {
+                    setDraftLoading(false)
+                }, 1000);
+                if(!draftLoading){
+                toast.success("Saved to Drafts")
+                setOpenAdd(!openAdd)
+                }
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const restoreToDraft = async (e) => {
+        try {
+            const res=await moveToDraft(blogId)
+            if(!res?.ok){
+                toast.error(res?.data?.message)
+            }else{
+                toast.success(res?.data?.message)
+                setOpenDraft(!openDraft)
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
     //--------------------------------------------------------------------------------
 
 
@@ -250,20 +339,49 @@ export default function MyBlogs() {
 
     const header = renderHeader();
     useEffect(() => {
-        getBlogs()
+        getTrashBlogs()
+    },[trashs])
+    useEffect(() => {
         getDrafts()
-    }, [blogs, openModal, openAdd, leave, viewBlog,edit])
+    },[drafts])
+
+    useEffect(() => {
+        getBlogs()
+        // getTrashBlogs()
+        // getDrafts()
+    }, [blogs,openModal, openAdd, leave, viewBlog,edit])
     return (
         <div className="content">
             {/* Delete Blog */}
             <Modal isOpen={openModal} toggle={toggle} className="modal-dialog-centered">
+                <ModalHeader toggle={toggle}>Trash Blog</ModalHeader>
+                <ModalBody>
+                    Are you sure you want to move this to trash ?
+                </ModalBody>
+                <ModalFooter>
+                    <Button className="btn-round" color="danger" onClick={trashTheBlog}>move to trash</Button>{' '}
+                    <Button className="btn-round" color="secondary" onClick={toggle}>Cancel</Button>
+                </ModalFooter>
+            </Modal>
+
+            <Modal isOpen={openDelete} toggle={toggleDelete} className="modal-dialog-centered">
                 <ModalHeader toggle={toggle}>Delete Blog</ModalHeader>
                 <ModalBody>
-                    Are you sure you want to delete this blog?
+                    Are you sure you want to delete this blog ?
                 </ModalBody>
                 <ModalFooter>
                     <Button className="btn-round" color="danger" onClick={deleteBlog}>Delete</Button>{' '}
-                    <Button className="btn-round" color="secondary" onClick={toggle}>Cancel</Button>
+                    <Button className="btn-round" color="secondary" onClick={toggleDelete}>Cancel</Button>
+                </ModalFooter>
+            </Modal>
+            <Modal isOpen={openDraft} toggle={toggleDraft} className="modal-dialog-centered">
+                <ModalHeader toggle={toggle}>Move to Draft</ModalHeader>
+                <ModalBody>
+                    Are you sure you want to move this to Draft ?
+                </ModalBody>
+                <ModalFooter>
+                    <Button className="btn-round" color="danger" onClick={restoreToDraft}>Move to Draft</Button>{' '}
+                    <Button className="btn-round" color="secondary" onClick={toggleDraft}>Cancel</Button>
                 </ModalFooter>
             </Modal>
 
@@ -304,8 +422,6 @@ export default function MyBlogs() {
                                                 marginLeft: 'auto',
                                                 marginRight: '0px',
                                                 padding: '10px',
-                                                borderRadius: '50%',
-                                                backgroundColor: '#e9ecef',
                                                 marginBottom: '7px'
                                             }}
                                                 onClick={theLeave} />
@@ -319,12 +435,12 @@ export default function MyBlogs() {
 
                                     <Form>
                                         <div className="form-group">
-                                            <label htmlFor="exampleFormControlInput1">Title</label>
-                                            <input  type="text" className="form-control" value={title} onChange={(e) => setTitle(e.target.value)} id="exampleFormControlInput1" placeholder="Title" />
+                                            <Label htmlFor="exampleFormControlInput1">Title</Label>
+                                            <Input disabled={loading}  type="text" className="form-control" value={title} onChange={(e) => setTitle(e.target.value)} id="exampleFormControlInput1" placeholder="Title" />
                                             {titleError && <p style={{ color: 'red' }}>{titleError}</p>}
                                         </div>
                                         <div className="form-group">
-                                            <label htmlFor="exampleFormControlTextarea1">Content</label>
+                                            <Label htmlFor="exampleFormControlTextarea1">Content</Label>
 
                                             {/* Jodit Editor */}
                                             <JoditEditor
@@ -337,8 +453,8 @@ export default function MyBlogs() {
                                             {contentError && <p style={{ color: 'red' }}>{contentError}</p>}
                                         </div>
                                         {!edit&&(<><div className="form-group">
-                                            <label htmlFor="exampleFormControlFile1">Image</label>
-                                            <input type="file" className="form-control-file" id="exampleFormControlFile1" onChange={handleFileInput} value={image} />
+                                            <Label htmlFor="exampleFormControlFile1">Image</Label>
+                                            <Input disabled={loading} type="file" className="form-control-file" id="exampleFormControlFile1" onChange={handleFileInput} value={image} />
                                             {imageError && <p style={{ color: 'red' }}>{imageError}</p>}
                                         </div>
                                         {preview && (<div className="form-group">
@@ -346,10 +462,15 @@ export default function MyBlogs() {
                                         </div>)}
                                         </>
                                         )}
-                                        <Button className="btn btn-primary btn-md btn-round" onClick={edit? editBlog:addBlog}>
+                                        <div className="form-group d-flex justify-content-end">
+                                         <Button className="btn btn-secondary btn-md btn-round" onClick={saveToDraft}>
+                                            {draftLoading ? <Spinner style={{width:20,height:20}} color="light" /> : 'Save to Draft'}
+                                         </Button>
+                                        <Button className="btn btn-primary btn-md btn-round ml-3" onClick={edit? editBlog:addBlog}>
                                             {/* {edit ? 'Edit Blog' : 'Post Blog'} */}
-                                            {loading ? <Spinner color="light" /> : edit ? 'Edit Blog' : 'Post Blog'}
-                                            </Button>
+                                            {loading ? <Spinner style={{width:20,height:20}} color="light" /> : edit ? 'Edit Blog' : 'Post Blog'}
+                                        </Button>
+                                        </div>
                                     </Form>
                                         </>
                                     
@@ -364,18 +485,14 @@ export default function MyBlogs() {
                             
                                 </CardHeader>
                                 <TabView>
-                                    <TabPanel header="Posts" leftIcon="pi pi-fw pi-book">
-                                {blogs==null ? (
+                                    <TabPanel header={`Posts ${tc(blogs?.length,{digits: 1, uppercase: false})}`} leftIcon="pi pi-fw pi-book">
+                                {blogs.length===0 ? (
                                    <DataTable value={Array.from({ length: 5 }, (v, i) => i)} showGridlines  header={header} filters={filters} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} paginatorLeft filterIcon>
                                         <Column field="S.No" header="S.No" body={bodyTemplate} />
                                         <Column field="title" header="Title" sortable body={bodyTemplate} />
                                         <Column field="createdAt" header="Date" body={bodyTemplate} sortable/>
                                         <Column header="Actions" body={bodyTemplate}/>
                                     </DataTable>
-                                //  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                                //         <img src={nodata} alt="empty" style={{ width: '500px', height: '500px' }} />
-                                        
-                                //     </div>
                                 ) :
                                   
                                     <>
@@ -385,7 +502,7 @@ export default function MyBlogs() {
                                         <Column field="createdAt" header="Date" body={(e) => moment(e.createdAt).format('DD-MM-YYYY')} sortable/>
                                         <Column header="Actions" body={(e) => (
                                             <>
-                                                <Button className="btn btn-success btn-sm mr-2 btn-round mt-1" onClick={() => {
+                                                <Button className="btn btn-primary btn-sm mr-2 btn-round mt-1" onClick={() => {
                                                     setViewBlog(!viewBlog)
                                                     localStorage.setItem("blogId", e._id)
                                                 }}><i className="pi pi-eye"  style={{ fontSize: '1.2rem'}}/></Button>
@@ -407,11 +524,69 @@ export default function MyBlogs() {
                                     </>
                                     }
                                     </TabPanel>
-                                    <TabPanel header="Drafts" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }} leftIcon="pi pi-fw pi-paperclip">
-                                    <h5 style={{ marginLeft: '20px' }}>No Drafts</h5>
+                                    <TabPanel header={`Drafts ${tc(drafts?.length,{digits: 1, uppercase: false})}`}  leftIcon="pi pi-fw pi-paperclip">
+                                    <DataTable value={drafts}  showGridlines  header={header} filters={filters} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} paginatorLeft filterIcon>
+                                        <Column field="S.No" header="S.No" body={(e) => drafts.indexOf(e) + 1} />
+                                        <Column field="title" header="Title" sortable />
+                                        <Column field="createdAt" header="Date" body={(e) => moment(e.createdAt).format('DD-MM-YYYY')} sortable/>
+                                        <Column header="Actions" body={(e) => (
+                                            <>
+                                            {/* View the blog */}
+                                                <Button className="btn btn-success btn-sm mr-2 btn-round mt-1" onClick={() => {
+                                                    setViewBlog(!viewBlog)
+                                                    localStorage.setItem("blogId", e._id)
+                                                }}><i className="pi pi-eye"  style={{ fontSize: '1.2rem'}}/></Button>
+
+                                            {/* Edit the blog */}
+                                                <Button className="btn btn-warning btn-sm mr-2 btn-round mt-1"
+                                                    onClick={async () => {
+                                                        setEdit(!edit)
+                                                        setBlogId(e._id)
+                                                        getBlogForEdit(e._id)
+                                                    }
+                                                    }
+                                                ><i className="pi pi-pencil" style={{ fontSize: '1.2rem'}}/></Button>
+
+                                            {/* Move the blog to trash */}
+                                                <Button className="btn btn-danger btn-sm mr-2 btn-round mt-1" onClick={() => {
+                                                    toggle()
+                                                    setBlogId(e._id)
+                                                }}><i className="pi pi-trash" style={{ fontSize: '1.2rem'}}/></Button>
+
+                                            {/* Post the blog */}
+                                                <Button className="btn btn-primary btn-sm btn-round mt-1" onClick={() => {
+                                                    // togglePost()
+                                                    setBlogId(e._id)
+                                                }}><i className="pi pi-book" style={{ fontSize: '1.2rem'}}/></Button>
+
+                                            </>
+                                        )}/>
+                                    </DataTable>
                                     </TabPanel>
-                                    <TabPanel header="Trash" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }} leftIcon="pi pi-fw pi-trash">
-                                    <h5 style={{ marginLeft: '20px' }}>No Trash</h5>
+                                    <TabPanel header={`Trash ${tc(trashs?.length,{digits: 1, uppercase: false})}`}  leftIcon="pi pi-fw pi-trash">
+                                    <DataTable value={trashs} showGridlines  header={header} filters={filters} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} paginatorLeft filterIcon>
+                                        <Column field="S.No" header="S.No" body={(e) => trashs.indexOf(e) + 1} />
+                                        <Column field="title" header="Title" sortable />
+                                        <Column field="createdAt" header="Date" body={(e) => moment(e.createdAt).format('DD-MM-YYYY')} sortable/>
+                                        <Column header="Actions" body={(e) => (
+                                            <>
+                                                
+                                                {/* Restore the blog to draft */}
+                                                <Button className="btn btn-success btn-sm mr-2 btn-round mt-1" onClick={() => {
+                                                    toggleDraft()
+                                                    setBlogId(e._id)
+                                                }}><i className="pi pi-refresh"  style={{ fontSize: '1.2rem'}}/></Button>
+
+                                                
+                                                {/* Delete the blog */}
+
+                                                <Button className="btn btn-danger btn-sm btn-round mt-1" onClick={() => {
+                                                    toggleDelete()
+                                                    setBlogId(e._id)
+                                                }}><i className="pi pi-trash" style={{ fontSize: '1.2rem'}}/></Button>
+                                            </>
+                                        )}/>
+                                    </DataTable>
                                     </TabPanel>
                                 </TabView>
                             </CardBody>

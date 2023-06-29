@@ -171,23 +171,6 @@ export const addUserBlog = async (body) => {
     return { data: data, ok: true }
 }
 
-export const getAllDraftBlogs = async () => {
-    const requestOptions = {
-        method: "GET",
-        mode: "cors",
-        headers: {
-            "Content-Type": "application/json",
-            "auth-token": token
-        },
-    }
-    const response = await fetch(baseUrl + "blogs/getdrafts", requestOptions)
-    if (!response.ok) {
-        let data = await response.json();
-        return { data: data, ok: false }
-    }
-    let data = await response?.json();
-    return { data: data, ok: true }
-}
 
 export const editUserBlog = async (body,id) => {
     const requestOptions = {
@@ -218,6 +201,78 @@ export const userProfile = async () => {
         },
     }
     const response = await fetch(baseUrl + "users/userprofile", requestOptions)
+    if (!response.ok) {
+        let data = await response.json();
+        return { data: data, ok: false }
+    }
+    let data = await response.json();
+    return { data: data, ok: true }
+}
+
+export const getAllUserTrashBlogs = async () => {
+    const requestOptions = {
+        method: "GET",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json",
+            "auth-token": token
+        },
+    }
+    const response = await fetch(baseUrl + "blogs/mytrashblogs", requestOptions)
+    if (!response.ok) {
+        let data = await response.json();
+        return { data: data, ok: false }
+    }
+    let data = await response.json();
+    return { data: data, ok: true }
+}
+
+export const moveToTrash = async (id) => {
+    const requestOptions = {
+        method: "PUT",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json",
+            "auth-token": token
+        },
+    }
+    const response = await fetch(baseUrl + `blogs/movetotrash?id=${id}`, requestOptions)
+    if (!response.ok) {
+        let data = await response.json();
+        return { data: data, ok: false }
+    }
+    let data = await response?.json();
+    return { data: data, ok: true }
+}
+
+export const moveToDraft = async (id) => {
+    const requestOptions = {
+        method: "PUT",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json",
+            "auth-token": token
+        },
+    }
+    const response = await fetch(baseUrl + `blogs/movetodraft?id=${id}`, requestOptions)
+    if (!response.ok) {
+        let data = await response.json();
+        return { data: data, ok: false }
+    }
+    let data = await response?.json();
+    return { data: data, ok: true }
+}
+
+export const getUserDrafts = async () => {
+    const requestOptions = {
+        method: "GET",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json",
+            "auth-token": token
+        },
+    }
+    const response = await fetch(baseUrl + "blogs/getuserdrafts", requestOptions)
     if (!response.ok) {
         let data = await response.json();
         return { data: data, ok: false }
