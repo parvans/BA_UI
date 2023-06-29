@@ -524,8 +524,8 @@ export default function MyBlogs() {
                                     </>
                                     }
                                     </TabPanel>
-                                    <TabPanel header={`Drafts ${drafts?.length}`}  leftIcon="pi pi-fw pi-paperclip">
-                                    <DataTable value={drafts} showGridlines  header={header} filters={filters} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} paginatorLeft filterIcon>
+                                    <TabPanel header={`Drafts ${tc(drafts?.length,{digits: 1, uppercase: false})}`}  leftIcon="pi pi-fw pi-paperclip">
+                                    <DataTable value={drafts}  showGridlines  header={header} filters={filters} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} paginatorLeft filterIcon>
                                         <Column field="S.No" header="S.No" body={(e) => drafts.indexOf(e) + 1} />
                                         <Column field="title" header="Title" sortable />
                                         <Column field="createdAt" header="Date" body={(e) => moment(e.createdAt).format('DD-MM-YYYY')} sortable/>
@@ -548,15 +548,22 @@ export default function MyBlogs() {
                                                 ><i className="pi pi-pencil" style={{ fontSize: '1.2rem'}}/></Button>
 
                                             {/* Move the blog to trash */}
-                                                <Button className="btn btn-danger btn-sm btn-round mt-1" onClick={() => {
+                                                <Button className="btn btn-danger btn-sm mr-2 btn-round mt-1" onClick={() => {
                                                     toggle()
                                                     setBlogId(e._id)
                                                 }}><i className="pi pi-trash" style={{ fontSize: '1.2rem'}}/></Button>
+
+                                            {/* Post the blog */}
+                                                <Button className="btn btn-primary btn-sm btn-round mt-1" onClick={() => {
+                                                    // togglePost()
+                                                    setBlogId(e._id)
+                                                }}><i className="pi pi-book" style={{ fontSize: '1.2rem'}}/></Button>
+
                                             </>
                                         )}/>
                                     </DataTable>
                                     </TabPanel>
-                                    <TabPanel header={`Trash ${trashs?.length}`}  leftIcon="pi pi-fw pi-trash">
+                                    <TabPanel header={`Trash ${tc(trashs?.length,{digits: 1, uppercase: false})}`}  leftIcon="pi pi-fw pi-trash">
                                     <DataTable value={trashs} showGridlines  header={header} filters={filters} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} paginatorLeft filterIcon>
                                         <Column field="S.No" header="S.No" body={(e) => trashs.indexOf(e) + 1} />
                                         <Column field="title" header="Title" sortable />
