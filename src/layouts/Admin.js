@@ -70,7 +70,6 @@ function Dashboard(props) {
         <DemoNavbar {...props} />
         <Switch>
           {routes.map((prop, key) => {
-            // console.log("routes: ", prop)
             
             return (
               <Route

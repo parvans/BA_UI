@@ -1,40 +1,22 @@
+import ChatBox from 'components/miscellaneous/ChatBox'
+import MyChats from 'components/miscellaneous/MyChats'
+import SideDrawer from 'components/miscellaneous/SideDrawer'
+import { ChatState } from 'context/ChatProvider'
 import React from 'react'
 import { Card, CardBody, Col, Row } from 'reactstrap'
 
 export default function ChatArea() {
+    const {user}=ChatState()
   return (
     <div className="content">
-        <Row>
-            <Col md="4">
-                <Card>
-                    <CardBody>
-                        <div className="card-title">Chat</div>
-                        <hr/>
-                        <div className="messages">
-                            {/* <Message/> */}
-                            <div className="message">
-                                <div className="message-content">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.
-                                </div>
-                                <div className="message-time">10:12 PM | 12/12/2020</div>
-                                <div className="message-content">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.
-                                </div>
-                                <div className="message-time">10:12 PM | 12/12/2020</div>
-                            </div>
-                        </div>
-                    </CardBody>
-                </Card>
-            </Col>
-
-            <Col md="8">
-                <Card>
-                    <CardBody>
-                        <div className="card-title">Chat</div>
-                    </CardBody>
-                </Card>
-            </Col>
-        </Row>
+        <div style={{width:"100%"}}>
+            {user&& <SideDrawer/>}
+            <div style={{display:"flex",justifyContent:"space-between",width:"100%",height:"91.5vh",padding:"10px"}}>
+                {user&& <MyChats/>}
+                {user&& <ChatBox/>}
+            </div>
+           
+        </div>
     </div>
   )
 }

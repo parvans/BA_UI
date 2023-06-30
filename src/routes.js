@@ -17,16 +17,14 @@
 
 */
 import Dashboard from "views/Dashboard.js";
-import Notifications from "views/Notifications.js";
-import Icons from "views/Icons.js";
-import Typography from "views/Typography.js";
-import TableList from "views/Tables.js";
-import Maps from "views/Map.js";
 import UserPage from "views/User.js";
-import Login from "views/ezhuth/auth/Login.js";
 import MyBlogs from "views/ezhuth/myBlogs/MyBlogs";
-import Blog from "views/ezhuth/Blog/Blog";
 import ChatArea from "views/ezhuth/Chat/ChatArea";
+// import Notifications from "views/Notifications.js";
+import Icons from "views/Icons.js";
+// import Typography from "views/Typography.js";
+// import TableList from "views/Tables.js";
+// import Maps from "views/Map.js";
 
 var routes = [
   {
@@ -73,13 +71,13 @@ var routes = [
   //   layout:"/auth"
   // },
 
-  // {
-  //   path: "/icons",
-  //   name: "Icons",
-  //   icon: "nc-icon nc-diamond",
-  //   component: Icons,
-  //   layout: "/ezhuth"
-  // },
+  {
+    path: "/icons",
+    name: "Icons",
+    icon: "nc-icon nc-diamond",
+    component: Icons,
+    layout: "/ezhuth"
+  },
   // {
   //   path: "/maps",
   //   name: "Maps",

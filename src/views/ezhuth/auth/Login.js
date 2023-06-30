@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import GoogleButton from 'react-google-button'
 import { toast, Toaster } from 'react-hot-toast'
 import { useHistory } from 'react-router-dom'
 import { Button, Card, CardBody, CardGroup, CardSubtitle, CardTitle, Col, Container, FormGroup, Input, Label, Row, Spinner } from 'reactstrap'
@@ -8,13 +7,11 @@ import { userResetPassword } from 'utilities/apiService'
 import { verifyUserOtp } from 'utilities/apiService'
 import { userRegister } from 'utilities/apiService'
 import { userLogin } from 'utilities/apiService'
-import { UserAuth } from '../../../context/AuthContext'
 export default function Login() {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
-    // const [photo, setPhoto] = useState('')
     const [otp, setOtp] = useState('')
     // errors
     const [nameError, setNameError] = useState('')
@@ -25,21 +22,12 @@ export default function Login() {
 
     const [isRegister, setIsRegister] = useState(false)
     const [isForgotPassword, setIsForgotPassword] = useState(false)
-    // const [isverify, setIsverify] = useState(false)
     const [isOtp, setIsOtp] = useState(false)
     const [isResetPassword, setIsResetPassword] = useState(false)
     const [loading, setLoading] = useState(false)
 
     const navigation = useHistory()
-    const { googleSignIn } = UserAuth()
 
-    const handleGoogleLogin = async () => {
-        try {
-            await googleSignIn()
-        } catch (error) {
-            console.log(error);
-        }
-    }
     const handleLogin = async (e) => {
         e.preventDefault()
         if (email === '') {
@@ -327,20 +315,7 @@ export default function Login() {
                                                 <CardSubtitle tag='h6' className='mb-2 text-muted'>Create your account</CardSubtitle>
                                             
                                                 <FormGroup>
-                                                    {/* <Label for='photo-upload' className='text-center w-100' style={{cursor:'pointer'}}>
-                                        <span className='text-primary' onClick={photoUpload}>
-                                            <img
-
-                                                src='https://www.pngitem.com/pimgs/m/30-307416_profile-icon-png-image-free-download-searchpng-employee.png'
-                                                className='rounded-circle img-thumbnail'
-                                                alt='profile'
-                                                width='100'
-                                                height='100'
-                                            />
-                                            <br />
-                                        </span>
-                                    </Label>                                     */}
-
+                                                    
                                                     <Label for='Name'>Name</Label>
                                                     <Input disabled={loading} placeholder="Name" type="text" value={name} onChange={(e) => setName(e.target.value)} />
                                                     {nameError && <p className='text-danger' >{nameError}</p>}
