@@ -1,22 +1,20 @@
 import ChatBox from 'components/miscellaneous/ChatBox'
 import MyChats from 'components/miscellaneous/MyChats'
-import SideDrawer from 'components/miscellaneous/SideDrawer'
 import { ChatState } from 'context/ChatProvider'
 import React from 'react'
 import { Card, CardBody, Col, Row } from 'reactstrap'
 
 export default function ChatArea() {
     const {user}=ChatState()
+    const [fetchAgain,setFetchAgain]=React.useState(false)
+
   return (
     <div className="content">
-        <div style={{width:"100%"}}>
-            {user&& <SideDrawer/>}
-            <div style={{display:"flex",justifyContent:"space-between",width:"100%",height:"91.5vh",padding:"10px"}}>
+            <Row>
                 {user&& <MyChats/>}
                 {user&& <ChatBox/>}
-            </div>
+            </Row>
            
-        </div>
     </div>
   )
 }

@@ -28,6 +28,8 @@ import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 
 import routes from "routes.js";
 import NotFound from "views/ezhuth/NotFound";
+import { ChatState } from "context/ChatProvider";
+import UserPage from "views/User.js";
 
 var ps;
 
@@ -36,6 +38,7 @@ function Dashboard(props) {
   const [activeColor, setActiveColor] = React.useState("info");
   const mainPanel = React.useRef();
   const location = useLocation();
+  const {user}=ChatState();
   React.useEffect(() => {
     if (navigator.platform.indexOf("Win") > -1) {
       ps = new PerfectScrollbar(mainPanel.current);
@@ -72,15 +75,15 @@ function Dashboard(props) {
           {routes.map((prop, key) => {
             
             return (
-              <Route
+               <Route
                 path={prop.layout + prop.path}
                 component={prop.component}
                 key={key}
-              />
+              /> 
             );
           })}
         <Route path="/ezhuth" component={NotFound} />
-
+       
         </Switch>
         <Footer fluid />
       </div>

@@ -70,19 +70,19 @@ export default function Login() {
 
     const handleRegister = async (e) => {
         e.preventDefault()
-        if (name === '') {
+        if (!name) {
             setNameError('Name is required')
         } else {
             setNameError('')
         }
-        if (email === '') {
+        if (!email) {
             setEmailError('Email is required')
         } else if (!/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{3}$/.test(email)) {
             setEmailError('Email is invalid')
         } else {
             setEmailError('')
         }
-        if (password === '') {
+        if (!password) {
             setPasswordError('Password is required')
         }else if(password.length < 6){
             setPasswordError('Password must be at least 6 characters')
@@ -99,7 +99,7 @@ export default function Login() {
         }else{
             setPasswordError('')
         }
-        if (confirmPassword === '') {
+        if (!confirmPassword) {
             setConfirmPasswordError('Confirm Password is required')
         }else if(confirmPassword !== password){
             setConfirmPasswordError('Confirm Password must be same as Password')
@@ -107,12 +107,12 @@ export default function Login() {
             setConfirmPasswordError('')
         }
 
-        if(!nameError !== '' && !emailError !== '' && !passwordError !== '' && !confirmPasswordError !== ''){
+        if(nameError||emailError||passwordError||confirmPasswordError){
             console.log('error');
         }else{
-        
-            setLoading(true)
-            const regResponse = await userRegister({
+            try {
+                setLoading(true)
+                const regResponse = await userRegister({
                 name: name,
                 email: email,
                 password: password
@@ -135,6 +135,10 @@ export default function Login() {
                 toast.error(regResponse.data.message)
                 }
             }
+            } catch (error) {
+                console.log(error);
+            }
+            
         }
         
 

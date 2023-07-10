@@ -8,6 +8,8 @@
     "@chakra-ui/react": "^2.7.1",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.13.7",
+    "@mui/material": "^5.13.7",
     "bootstrap": "4.6.0",
     "chart.js": "3.2.1",
     "cloudinary-react": "^1.8.1",
