@@ -1,27 +1,27 @@
 import BlogCard from "components/Cards/BlogCard";
 import React, { useEffect, useState } from "react";
 // react plugin used to create charts
-import { Line, Pie } from "react-chartjs-2";
+// import { Line, Pie } from "react-chartjs-2";
 // reactstrap components
 import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  CardTitle,
+  // Card,
+  // CardHeader,
+  // CardBody,
+  // CardFooter,
+  // CardTitle,
   Row,
   Col,
 } from "reactstrap";
 import { getAllBlogs } from "utilities/apiService";
 import Blog from "./ezhuth/Blog/Blog";
-import nodata from "assets/img/nodata.png";
 // core components
-import {
-  dashboard24HoursPerformanceChart,
-  dashboardEmailStatisticsChart,
-  dashboardNASDAQChart
-} from "variables/charts.js";
+// import {
+//   dashboard24HoursPerformanceChart,
+//   dashboardEmailStatisticsChart,
+//   dashboardNASDAQChart
+// } from "variables/charts.js";
 import CardSkeleton from "components/Skeletons/CardSkeleton";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 
 function Dashboard() {
@@ -30,8 +30,8 @@ function Dashboard() {
   const allBlogs=async()=>{
     try {
       const response=await getAllBlogs();
-      // console.log(response?.data?.data);
       setBlogs(response?.data?.data);
+      console.log(blog)
     } catch (error) {
       console.log(error);
     }
@@ -39,9 +39,11 @@ function Dashboard() {
   }
 
   const randoms=Array.from({ length: 5 }, (v, i) => i)
+  const history=useHistory()
   useEffect(() => {
     allBlogs();
   }, []);
+
   return (
     <>
       {/* <div className="content">

@@ -90,6 +90,7 @@ function Header(props) {
   React.useEffect(() => {
     window.addEventListener("resize", updateColor.bind(this));
   });
+
   React.useEffect(() => {
     if (
       window.innerWidth < 993 &&
@@ -139,7 +140,7 @@ function Header(props) {
           <span className="navbar-toggler-bar navbar-kebab" />
         </NavbarToggler>
         <Collapse isOpen={isOpen} navbar className="justify-content-end">
-          {/* <form>
+          <form>
             <InputGroup className="no-border">
               <Input type="text" placeholder="Search..."  />
               <InputGroupAddon addonType="append">
@@ -148,16 +149,16 @@ function Header(props) {
                 </InputGroupText>
               </InputGroupAddon>
             </InputGroup>
-          </form> */}
+          </form>
           <Nav navbar>
-            {/* <NavItem>
+            <NavItem>
               <Link to="#pablo" className="nav-link btn-magnify">
                 <i className="nc-icon nc-layout-11" />
                 <p>
                   <span className="d-lg-none d-md-block">Stats</span>
                 </p>
               </Link>
-            </NavItem> */}
+            </NavItem>
             <Dropdown
               nav
               isOpen={dropdownOpen}
@@ -191,7 +192,7 @@ function Header(props) {
                 </p>
               </Link> */}
               {/* <Badge color="danger" pill style={{ position: "absolute", top: "0px", right: "0px" }} >
-                1000
+                .
               </Badge> */}
 
             </NavItem>

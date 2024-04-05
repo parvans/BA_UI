@@ -23,6 +23,10 @@ import { moveToTrash } from 'utilities/apiService'
 import tc from 'thousands-counter';
 import { getUserDrafts } from 'utilities/apiService'
 import { moveToDraft } from 'utilities/apiService'
+import MoveToTrashModal from './modals/MoveToTrashModal'
+import MoveToDraftModal from './modals/MoveToDraftModal'
+import DeleteBlogModal from './modals/DeleteBlogModal'
+import LeaveModal from './modals/LeaveModal'
 
 export default function MyBlogs() {
     const editorRef = useRef(null)
@@ -42,13 +46,14 @@ export default function MyBlogs() {
     const [viewBlog, setViewBlog] = useState(false)
     const [loading, setLoading] = useState(false)
     const [draftLoading, setDraftLoading] = useState(false)
+    const [deleteLoading, setDeleteLoading] = useState(false)
     //recognize edit or add
     const [edit, setEdit] = useState(false)
     //errors
     const [titleError, setTitleError] = useState('')
     const [contentError, setContentError] = useState('')
     const [imageError, setImageError] = useState('')
-
+// console.log(trashs);
     //Filter
     const [filters, setFilters] = useState({
         global: {
@@ -70,6 +75,7 @@ export default function MyBlogs() {
     const getTrashBlogs=async()=>{
         try {
             const response=await getAllUserTrashBlogs()
+            // console.log(response?.data?.data);
             setTrashs(response?.data?.data)
         } catch (error) {
             console.log(error);
@@ -149,11 +155,10 @@ export default function MyBlogs() {
         setOpenModal(!openModal)
         try {
             const res = await moveToTrash(blogId)
-            console.log(res);
+            // console.log(res);
             if (!res?.ok) {
                 toast.error(res?.data?.message)
             } else {
-                // console.log(res?.data);
                 toast.success(res?.data?.message)
             }
         } catch (error) {
@@ -161,14 +166,16 @@ export default function MyBlogs() {
         }
     }
     const deleteBlog = async () => {
-        setOpenModal(!openModal)
+        setDeleteLoading(true)
         try {
             const res = await deleteMyBlogs(blogId)
-            console.log(res?.ok);
+            // console.log(res?.ok);
             if (!res?.ok) {
                 toast.error(res?.data?.message)
             } else {
                 toast.success(res?.data?.message)
+                setOpenDelete(!openDelete)
+                setDeleteLoading(false)
             }
         } catch (error) {
             console.log(error);
@@ -179,7 +186,7 @@ export default function MyBlogs() {
     const handleFileInput = (e) => {
         const file = e.target.files[0]
         previewFile(file)
-        console.log(file);
+        // console.log(file);
     }
     const previewFile = (file) => {
         const render = new FileReader()
@@ -338,6 +345,7 @@ export default function MyBlogs() {
     }
 
     const header = renderHeader();
+
     useEffect(() => {
         getTrashBlogs()
     },[trashs])
@@ -352,50 +360,21 @@ export default function MyBlogs() {
     }, [blogs,openModal, openAdd, leave, viewBlog,edit])
     return (
         <div className="content">
-            {/* Delete Blog */}
-            <Modal isOpen={openModal} toggle={toggle} className="modal-dialog-centered">
-                <ModalHeader toggle={toggle}>Trash Blog</ModalHeader>
-                <ModalBody>
-                    Are you sure you want to move this to trash ?
-                </ModalBody>
-                <ModalFooter>
-                    <Button className="btn-round" color="danger" onClick={trashTheBlog}>move to trash</Button>{' '}
-                    <Button className="btn-round" color="secondary" onClick={toggle}>Cancel</Button>
-                </ModalFooter>
-            </Modal>
+            {/* move to trash Blog */}
+            
+            <MoveToTrashModal openModal={openModal} toggle={toggle} trashTheBlog={trashTheBlog} />
 
-            <Modal isOpen={openDelete} toggle={toggleDelete} className="modal-dialog-centered">
-                <ModalHeader toggle={toggle}>Delete Blog</ModalHeader>
-                <ModalBody>
-                    Are you sure you want to delete this blog ?
-                </ModalBody>
-                <ModalFooter>
-                    <Button className="btn-round" color="danger" onClick={deleteBlog}>Delete</Button>{' '}
-                    <Button className="btn-round" color="secondary" onClick={toggleDelete}>Cancel</Button>
-                </ModalFooter>
-            </Modal>
-            <Modal isOpen={openDraft} toggle={toggleDraft} className="modal-dialog-centered">
-                <ModalHeader toggle={toggle}>Move to Draft</ModalHeader>
-                <ModalBody>
-                    Are you sure you want to move this to Draft ?
-                </ModalBody>
-                <ModalFooter>
-                    <Button className="btn-round" color="danger" onClick={restoreToDraft}>Move to Draft</Button>{' '}
-                    <Button className="btn-round" color="secondary" onClick={toggleDraft}>Cancel</Button>
-                </ModalFooter>
-            </Modal>
+            {/* move to draft Blog */}
+
+            <MoveToDraftModal openDraft={openDraft} toggleDraft={toggleDraft} restoreToDraft={restoreToDraft} />
+
+            {/* delete Blog */}
+
+            <DeleteBlogModal openDelete={openDelete} toggleDelete={toggleDelete} deleteBlog={deleteBlog} deleteLoading={deleteLoading} />
 
             {/* Leave modal in add blog  */}
-            <Modal isOpen={leave} toggle={toggleLeave} className="modal-dialog-centered">
-                <ModalHeader toggle={toggleLeave}>Leave Page</ModalHeader>
-                <ModalBody>
-                    Are you sure you want to leave this page?
-                </ModalBody>
-                <ModalFooter>
-                    <Button className="btn-round" color="danger" onClick={toggleEditOrAdd}>Leave</Button>{' '}
-                    <Button className="btn-round" color="secondary" onClick={toggleLeave}>Cancel</Button>
-                </ModalFooter>
-            </Modal>
+
+            <LeaveModal leave={leave} toggleLeave={toggleLeave} toggleEditOrAdd={toggleEditOrAdd} />
 
             <Row>
                 <Col md="12">
