@@ -55,13 +55,13 @@ var routes = [
     component: UserPage,
     layout: "/ezhuth"
   },
-  {
-    path: "/chats",
-    name: "Chats",
-    icon: "nc-icon nc-chat-33",
-    component: ChatArea,
-    layout: "/ezhuth"
-  },
+  // {
+  //   path: "/chats",
+  //   name: "Chats",
+  //   icon: "nc-icon nc-chat-33",
+  //   component: ChatArea,
+  //   layout: "/ezhuth"
+  // },
 
   // {
   //   path:"/login",
@@ -71,13 +71,13 @@ var routes = [
   //   layout:"/auth"
   // },
 
-  {
-    path: "/icons",
-    name: "Icons",
-    icon: "nc-icon nc-diamond",
-    component: Icons,
-    layout: "/ezhuth"
-  },
+  // {
+  //   path: "/icons",
+  //   name: "Icons",
+  //   icon: "nc-icon nc-diamond",
+  //   component: Icons,
+  //   layout: "/ezhuth"
+  // },
   // {
   //   path: "/maps",
   //   name: "Maps",

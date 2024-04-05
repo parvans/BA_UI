@@ -30,8 +30,8 @@ function Dashboard() {
   const allBlogs=async()=>{
     try {
       const response=await getAllBlogs();
-      // console.log(response?.data?.data);
       setBlogs(response?.data?.data);
+      console.log(blog)
     } catch (error) {
       console.log(error);
     }
@@ -43,6 +43,7 @@ function Dashboard() {
   useEffect(() => {
     allBlogs();
   }, []);
+
   return (
     <>
       {/* <div className="content">
