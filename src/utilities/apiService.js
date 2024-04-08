@@ -1,6 +1,6 @@
 //  ******************** Base URL ***********************
-// let baseUrl = "http://localhost:8000/api/";
-let baseUrl = "https://sore-cod-hosiery.cyclic.app/api/";
+let baseUrl = "http://localhost:8000/api/";
+// let baseUrl = "https://sore-cod-hosiery.cyclic.app/api/";
 //  ******************** Token ***********************
 var token = localStorage.getItem('ezuth-token')
 //  ******************** User API ***********************
