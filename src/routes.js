@@ -19,7 +19,6 @@
 import Dashboard from "views/Dashboard.js";
 import UserPage from "views/User.js";
 import MyBlogs from "views/ezhuth/myBlogs/MyBlogs";
-import ChatArea from "views/ezhuth/Chat/ChatArea";
 // import Notifications from "views/Notifications.js";
 import Icons from "views/Icons.js";
 // import Typography from "views/Typography.js";
@@ -55,13 +54,6 @@ var routes = [
     component: UserPage,
     layout: "/ezhuth"
   },
-  // {
-  //   path: "/chats",
-  //   name: "Chats",
-  //   icon: "nc-icon nc-chat-33",
-  //   component: ChatArea,
-  //   layout: "/ezhuth"
-  // },
 
   // {
   //   path:"/login",
