@@ -44,6 +44,9 @@ function Dashboard() {
     allBlogs();
   }, []);
 
+  console.log(blogs);
+  
+
   return (
     <>
       {/* <div className="content">
@@ -258,13 +261,17 @@ function Dashboard() {
 
             })
             :( 
-              randoms.map((blog, index) => {
-                return (
-                  <Col md="8" key={index}>
-                    <CardSkeleton/>
-                  </Col>
-              )
-            })
+              // randoms.map((blog, index) => {
+              //   return (
+              //     <Col md="8" key={index}>
+              //       <CardSkeleton/>
+              //     </Col>
+              // )
+
+              <p>No Blogs...</p>
+
+            // }
+          // )
             )
           }
           </Row>:
